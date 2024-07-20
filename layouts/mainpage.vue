@@ -15,11 +15,6 @@
             <div id="intro-column"></div>
             <div id="controls-column"></div>
         </div>
-        <button @click="NextView" class="next-page-button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
-                <path d="M36 12L56 32M56 32L36 52M56 32H8" stroke="#EEF6FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </button>
         <div class="controlls">
             <h2 style="margin-bottom: 16px">Controlls</h2>
             <div class="keys">
@@ -71,15 +66,6 @@ import { roadmap } from '~/components/Roadmap';
 let threeScene: Ref = ref(null)
 const router = useRouter()
 
-function NextView() {
-    // if (threeScene.value) {
-    //     threeScene.value.goToNextPos('burea')
-    // } else {
-    //     console.log('error')
-    // }
-    // console.log('clicked in parent')
-    router.push({ path: '/bureau' })
-}
 </script>
 
 <style lang="scss">

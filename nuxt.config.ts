@@ -8,6 +8,6 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    //'/': { redirect: '/home' },
+    '/': { redirect: '/home' },
   },
 })

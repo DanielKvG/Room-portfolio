@@ -12,6 +12,13 @@ import content from '../pages/laptop_screen.vue'
 import { texture } from 'three/examples/jsm/nodes/Nodes.js';
 import gsap from 'gsap';
 
+let valueX: number
+let valueY: number
+let valueZ: number
+let targetX: number
+let targetY: number
+let targetZ: number
+
 let renderer: WebGLRenderer
 let DOMrenderer: CSS3DRenderer
 //let controls: OrbitControls
@@ -29,6 +36,11 @@ let camTarget: Object3D
 // })
 
 //camera positions
+//----- Home ---------
+const posHome = {x: 30, y: 30, z: 50}
+const lookHome = {x: -24, y: -4, z: 0}
+
+//----- The Desk -----
 const posPC = {x: -6, y: 12, z: -10}
 const lookPC = {x: -13, y: 11, z: -10}
 
@@ -144,21 +156,31 @@ function init() {
 function KeyAction(e: KeyboardEvent) {
     console.log(e)
     if (e.keyCode == 39) {
-        router.push('/bureau')
+        router.push('/desk')
     }
 }
 
 //Called from parant component to move 
 function goToNextPos(path: string) {
-    const valueX = posPC.x
-    const valueY = posPC.y
-    const valueZ = posPC.z
-    const targetX = lookPC.x
-    const targetY = lookPC.y
-    const targetZ = lookPC.z
-    gsap.to(camera.position, {x: valueX, y: valueY, z: valueZ, duration: 2})
-    gsap.to(camTarget.position, {x: targetX, y: targetY, z: targetZ, duration: 2})
-    console.log('clicked in child')
+    console.log(path)
+    if (path == '/home') {
+        valueX = posHome.x
+        valueY = posHome.y
+        valueZ = posHome.z
+        targetX = lookHome.x
+        targetY = lookHome.y
+        targetZ = lookHome.z
+    }
+    else if (path == '/desk') {
+        valueX = posPC.x
+        valueY = posPC.y
+        valueZ = posPC.z
+        targetX = lookPC.x
+        targetY = lookPC.y
+        targetZ = lookPC.z
+    }
+    gsap.to(camera.position, {x: valueX, y: valueY, z: valueZ, duration: 2, ease: "power2.inOut"})
+    gsap.to(camTarget.position, {x: targetX, y: targetY, z: targetZ, duration: 2, ease: "power2.inOut"})
 }
 
 //Update functions
@@ -238,10 +260,7 @@ watch(aspectRatio, () => {
 })
 
 watch(() => route.fullPath, () => {
-    console.log(route.path)
-    if (route.path == '/bureau') {
-        goToNextPos(route.path)
-    }
+    goToNextPos(route.path)
 })
 
 onMounted(() => {
