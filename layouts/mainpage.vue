@@ -2,14 +2,14 @@
 
     <div class="page">
         <ClientOnly class="threeJS">
-            <Test ref="threeScene"/>
+            <ThreeScene ref="threeScene"/>
         </ClientOnly>
         <div class="html-pagina">
             <div class="name">
                 <h1>Dani&euml;l KvG</h1>
                 <h2>Kooyman van Guldener</h2>
             </div>
-            <slot/> <!-- route -->
+            <slot></slot> <!-- route -->
         </div>
         <div class="achtergrond">
             <div id="intro-column"></div>
@@ -96,7 +96,8 @@ function NextView() {
     z-index: 1;
     padding: 24px 48px;
     width: 560px;
-    gap: 24px;
+    gap: 48px;
+    color: #fefefe;
 
     .name {
         display: flex;
@@ -107,92 +108,6 @@ function NextView() {
         h1 {
             font-size: 56px;
             line-height: 105%;
-        }
-    }
-
-    .intro {
-        padding: 24px 24px 16px 24px;
-        margin-bottom: 56px;
-        justify-content: center;
-        align-items: center;
-
-        border-radius: 8px;
-        //border: 2px solid var(--primary-900, #183590);
-        background: rgba(187, 218, 255, 0.50);
-
-        span {
-            display: flex; 
-            flex-direction: row; 
-            align-items: baseline;
-        }
-
-        h3 {
-            font-size: 20px;
-            line-height: 120%;
-        }
-    }
-
-    .roadmap-item {
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: center;
-        margin-top: 16px;
-        max-height: 40px;
-        overflow: hidden;
-        max-width: 328px;
-        cursor: pointer;
-
-        border-radius: 8px;
-        background: var(--secondary-300, #D9E9FF);
-        border: 4px solid var(--primary-900, #183590);
-        color: #183590;
-        transition: max-height 500ms ease-in-out, background 500ms;
-
-        &.active {
-            max-height: 140px; 
-            background: var(--secondary-300, #78FDC4);
-        }
-
-        .item-header {
-            display: flex;
-            align-items: center;
-            align-self: stretch;
-
-            .item-header-number {
-                display: flex;
-                width: 56px;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-
-                h1 {
-                    font-size: 24px;
-                    line-height: 40px;
-                }
-            }
-
-            svg {
-                margin-right: 16px;
-                transform: rotate(180deg);
-                transition: transform 500ms;
-
-                &.rotate {
-                    transform: rotate(0deg);
-                }
-            }
-        }
-
-        .item-specs {
-            display: flex;
-            align-self: stretch;
-            background: white;
-            align-items: start;
-            border-radius: 0 0 6px 6px;
-
-            ul {
-                margin: 8px 0 0 0;
-            }
         }
     }
 }
@@ -209,7 +124,7 @@ function NextView() {
     column-gap: 0px;
 
     #intro-column {
-        background: #8DC3FF;
+        background: #12072B;
         grid-column: 1 / span 4;
     }
     #controls-column {
