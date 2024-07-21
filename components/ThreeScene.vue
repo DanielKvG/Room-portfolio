@@ -110,7 +110,7 @@ function init() {
     //Load the models
     const loader = new GLTFLoader();
     //----- Load the room ------
-    loader.load( 'models/room1.glb', function ( room ) {
+    loader.load( 'models/room1.glb', async function ( room ) {
         room.scene.scale.set(10, 10, 10)
         room.scene.traverse(function(node) {
             if (node.isObject3D) {
@@ -122,6 +122,10 @@ function init() {
             }
         })
         scene.add(room.scene)
+
+        // Set timeout of 500ms to move to desired position only after the model has loaded
+        await new Promise(f => setTimeout(f, 500));
+        goToNextPos(route.path)
     })
 
     //----- Load the duck ------
@@ -157,6 +161,9 @@ function KeyAction(e: KeyboardEvent) {
     console.log(e)
     if (e.keyCode == 39) {
         router.push('/desk')
+    }
+    if (e.keyCode == 37) {
+        router.push('/home')
     }
 }
 
