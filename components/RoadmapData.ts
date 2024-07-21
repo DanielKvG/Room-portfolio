@@ -4,10 +4,10 @@ export interface Roadmap {
     active: boolean;
 }
 
-export const roadmap: Array<Ref<Roadmap>> = [
+export const roadmapData: Array<Ref<Roadmap>> = [
     ref({
-        header: 'The bureau',
-        specs: ['Laptop screen - about me', 'Desktop 1 - School', 'Desktop 2 - Projects'],
+        header: 'The Desk',
+        specs: ['configure screens', 'fix lag issue'],
         active: true,
     }),
     ref({

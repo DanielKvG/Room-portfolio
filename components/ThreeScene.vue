@@ -11,6 +11,7 @@ import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject } from
 import content from '../pages/laptop_screen.vue'
 import { texture } from 'three/examples/jsm/nodes/Nodes.js';
 import gsap from 'gsap';
+import { pageOrder } from './pageOrder';
 
 let valueX: number
 let valueY: number
@@ -29,6 +30,7 @@ let scene: Scene
 let container: Ref<HTMLCanvasElement | null>
 let clock: Clock
 let camTarget: Object3D
+let cssObject: CSS3DObject
 
 //Expose functions to parant component
 // defineExpose({
@@ -42,7 +44,15 @@ const lookHome = {x: -24, y: -4, z: 0}
 
 //----- The Desk -----
 const posPC = {x: -6, y: 12, z: -10}
-const lookPC = {x: -13, y: 11, z: -10}
+const lookPC = {x: -14, y: 10, z: -10}
+
+//----- Roadmap ------
+const posRM = {x: 8, y: 18, z: -6}
+const lookRM = {x: 8, y: 15, z: -7}
+
+//----- Hobby corner ------
+const posHC = {x: 0, y: 16, z: 0}
+const lookHC = {x: 0, y: 10, z: 20}
 
 //aspect ratio for adjusting scenes
 const { width, height } = useWindowSize()
@@ -131,8 +141,9 @@ function init() {
     //----- Load the duck ------
     loader.load( 'models/duckkie.glb', function ( gltf ) {
         duck = gltf
-        duck.scene.position.set(6, 12.2, -10)
+        duck.scene.position.set(11, 12.2, -9)
         duck.scene.lookAt(0, 12.2, 3)
+        duck.scene.scale.set(0.5, 0.5, 0.5)
         scene.add(duck.scene)
 
         mixer = new AnimationMixer(duck.scene)
@@ -147,22 +158,34 @@ function init() {
         console.error( error );
     });
 
-    // Create the laptop screen
+    // Create the laptop screen, scene add is on request in function pcPower
     const vueComponent = createVueComponent('1088px', '624px', '/aboutme');
-    const cssObject = new CSS3DObject(vueComponent);
+    cssObject = new CSS3DObject(vueComponent);
     cssObject.position.set(-12.58, 8.69, -9.35);
     cssObject.rotateY(Math.PI / 2)
     cssObject.rotateX(-Math.PI / 16)
     cssObject.scale.set(0.0033, 0.0033, 0.0033)
-    scene.add(cssObject);
 }
 
 function KeyAction(e: KeyboardEvent) {
-    console.log(e)
+    //right
     if (e.keyCode == 39) {
-        router.push('/desk')
+        for (let i=0; i < ( pageOrder.length - 1 ); i++) {
+            if (route.path == pageOrder[i].route) {
+                router.push(pageOrder[i+1].route)
+            }
+        }
     }
+    //left
     if (e.keyCode == 37) {
+        for (let i=0; i < ( pageOrder.length - 1 ); i++) {
+            if (route.path == pageOrder[i].route) {
+                router.push(pageOrder[i-1].route)
+            }
+        }
+    }
+    //escape
+    if (e.keyCode == 27) {
         router.push('/home')
     }
 }
@@ -185,9 +208,33 @@ function goToNextPos(path: string) {
         targetX = lookPC.x
         targetY = lookPC.y
         targetZ = lookPC.z
+        pcPower(true)
+    }
+    else if (path == '/roadmap') {
+        valueX = posRM.x
+        valueY = posRM.y
+        valueZ = posRM.z
+        targetX = lookRM.x
+        targetY = lookRM.y
+        targetZ = lookRM.z
+    }
+    else if (path == '/hobbycorner') {
+        valueX = posHC.x
+        valueY = posHC.y
+        valueZ = posHC.z
+        targetX = lookHC.x
+        targetY = lookHC.y
+        targetZ = lookHC.z
     }
     gsap.to(camera.position, {x: valueX, y: valueY, z: valueZ, duration: 2, ease: "power2.inOut"})
     gsap.to(camTarget.position, {x: targetX, y: targetY, z: targetZ, duration: 2, ease: "power2.inOut"})
+}
+
+//turn on or off pc
+function pcPower(state: boolean) {
+    if (state) {
+        scene.add(cssObject);
+    } else {scene.remove(cssObject)}
 }
 
 //Update functions
@@ -267,6 +314,9 @@ watch(aspectRatio, () => {
 })
 
 watch(() => route.fullPath, () => {
+    if (route.path != '/desk') {
+        pcPower(false)
+    }
     goToNextPos(route.path)
 })
 

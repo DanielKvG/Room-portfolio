@@ -1,6 +1,6 @@
 <template>
     <div class="aboutme">
-        <p>Hello, I'm Daniel</p>
+        <h1>This page is coming soon!</h1>
     </div>
 </template>
 
@@ -14,6 +14,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgb(137, 152, 255);
+    display: flex;
+    background: #fefefe;
+    
+    h1 {
+        margin: auto;
+    }
 }
 </style>

@@ -41,9 +41,9 @@
                         <div class="keyframe" style="padding: 2px 8px 18px 4px;">
                             <p style="color: white;">Esc</p>
                         </div>
-                        <p>Enter room / Next scene</p>
+                        <p>Exit room</p>
                     </div>
-                    <div class="key">
+                    <!-- <div class="key">
                         <div class="keyframe" style="padding: 0px 7px 0px 7px; background: none; border: 1.5px solid transparent">
                             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="40" viewBox="0 0 26 40" fill="none">
                                 <path d="M6 37.5867L2 33.7858L0.5 29.5626V10.9804L2.5 5.49018L6.5 1.68927L12.5 0.422302L21 2.53392L25 8.86876V29.5626L22.5 35.4751L17.5 39.276H10L6 37.5867Z" fill="#8DC3FF"/>
@@ -52,7 +52,7 @@
                             </svg>
                         </div>
                         <p>Click</p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -61,7 +61,6 @@
 </template>
 
 <script setup lang="ts">
-import { roadmap } from '~/components/Roadmap';
 
 let threeScene: Ref = ref(null)
 const router = useRouter()
@@ -71,6 +70,7 @@ const router = useRouter()
 <style lang="scss">
 .threeJS {
     pointer-events: none;
+    
 }
 
 .html-pagina {
@@ -79,9 +79,11 @@ const router = useRouter()
     flex-direction: column;
     align-items: flex-start;
     top: 0;
-    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
     padding: 24px 48px;
-    width: 560px;
     gap: 48px;
     color: #fefefe;
 
@@ -146,8 +148,8 @@ const router = useRouter()
 
     .keys {
         display: flex;
-        flex-direction: row;
-        gap: 16px;
+        flex-direction: column;
+        gap: 24px;
 
         .vertical-keys {
             display: flex;

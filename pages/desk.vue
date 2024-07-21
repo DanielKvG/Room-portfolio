@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="absolute-frame">
     <button @click="NextView" class="next-page">
         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
             <path d="M36 12L56 32M56 32L36 52M56 32H8" stroke="#EEF6FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -26,6 +26,7 @@ function NextView() {
 </script>
 
 <style lang="scss">
+
 button {
     position: absolute;
     top: 0;
@@ -42,12 +43,13 @@ button {
     border-radius: 32px;
     background: rgba(0, 0, 0, 0.46);
 
-    .next-page {
+    &.next-page {
       right: 40px;
     }
 
-    .prevous-page {
+    &.prevous-page {
       left: 40px;
+      transform: rotate(180deg);
     }
 }
 </style>

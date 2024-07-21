@@ -1,5 +1,5 @@
 <template>
-    <div class="roadmap">
+    <div id="roadmap">
         <h2 style="margin-bottom: 16px;">Roadmap - Next updates</h2>
         <div class="roadmap-item" :class="{ active: item.value.active }" v-for="(item, index) in roadmap" :key="item.value.header">
             <div class="item-header" @click="ToggleActiveItem(index)">
@@ -21,7 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import { roadmap } from "./Roadmap";
+import { roadmapData as roadmap } from "../components/RoadmapData";
+
+const router = useRouter()
+
+definePageMeta({
+  layout: 'mainpage'
+})
 
 function ToggleActiveItem( item: number ) {
     for (let i=0; i<roadmap.length; i++) {
@@ -32,9 +38,23 @@ function ToggleActiveItem( item: number ) {
         else roadmap[i].value.active = false
     }
 }
+
+async function loadContent() {
+    await new Promise(f => setTimeout(f, 2000));
+    document.getElementById('roadmap')?.setAttribute("style", "opacity: 1;")
+}
+onMounted(() => {
+    loadContent()
+})
 </script>
 
 <style scoped lang="scss">
+#roadmap {
+    opacity: 0;
+    align-self: stretch;
+    margin: 0 auto;
+    transition: opacity 300ms ease-in;
+}
 
 .roadmap-item {
     display: flex;
