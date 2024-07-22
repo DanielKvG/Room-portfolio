@@ -180,4 +180,36 @@ const router = useRouter()
     }
 }
 
+/* Vertical Styles */
+@media (max-width: 1024px) {
+    .html-pagina {
+        padding: 24px 16px;
+    }
+    .name {
+        h1 {
+            font-size: 40px;
+        }
+        h2 {
+            font-size: 20px;
+        }
+    }
+    
+    .controlls {
+        display: none;
+    }
+
+    .achtergrond {
+        grid-auto-rows: auto;
+
+        #intro-column {
+            grid-column: 1 / span 7;
+            grid-row: 1 / span 5;
+        }
+        #controls-column {
+            grid-column: 1 / span 7;
+            grid-row: 6 / span 2;
+        }
+    }
+}
+
 </style>

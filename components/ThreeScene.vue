@@ -31,6 +31,7 @@ let container: Ref<HTMLCanvasElement | null>
 let clock: Clock
 let camTarget: Object3D
 let cssObject: CSS3DObject
+let mobile: Ref<boolean | null>
 
 //Expose functions to parant component
 // defineExpose({
@@ -41,6 +42,10 @@ let cssObject: CSS3DObject
 //----- Home ---------
 const posHome = {x: 30, y: 30, z: 50}
 const lookHome = {x: -24, y: -4, z: 0}
+
+//----- Mobile Home --
+const posMobileHome = {x: 72, y: 50, z: 56}
+const lookMobileHome = {x: -22, y: 22, z: -16}
 
 //----- The Desk -----
 const posPC = {x: -6, y: 12, z: -10}
@@ -57,7 +62,12 @@ const lookHC = {x: 0, y: 10, z: 20}
 //aspect ratio for adjusting scenes
 const { width, height } = useWindowSize()
 const aspectRatio = computed(() => width.value / height.value)
-
+if (width.value > 1024) {
+    console.log(width.value)
+    mobile = ref(false)
+} else {
+    mobile = ref(true)
+}
 //store the route
 const route = useRoute()
 const router = useRouter()
@@ -194,12 +204,20 @@ function KeyAction(e: KeyboardEvent) {
 function goToNextPos(path: string) {
     console.log(path)
     if (path == '/home') {
-        valueX = posHome.x
-        valueY = posHome.y
-        valueZ = posHome.z
-        targetX = lookHome.x
-        targetY = lookHome.y
-        targetZ = lookHome.z
+        let posH, lookH
+        if (mobile.value) {
+            posH = posMobileHome
+            lookH = lookMobileHome
+        } else {
+            posH = posHome
+            lookH = lookHome
+        }
+        valueX = posH.x
+        valueY = posH.y
+        valueZ = posH.z
+        targetX = lookH.x
+        targetY = lookH.y
+        targetZ = lookH.z
     }
     else if (path == '/desk') {
         valueX = posPC.x
@@ -241,6 +259,22 @@ function pcPower(state: boolean) {
 function updateRender() {
     renderer.setSize(width.value, height.value)
     DOMrenderer.setSize(width.value, height.value)
+    // Adjust camera mode to screen size
+    if (width.value > 1024) {
+        if (!mobile.value) {
+            return
+        } else {
+            mobile.value = false
+            goToNextPos(route.path)
+        }
+    } else {
+        if (mobile.value) {
+            return
+        } else {
+            mobile.value = true
+            goToNextPos(route.path)
+        }
+    }
     renderer.render(scene, camera)
     DOMrenderer.render(scene, camera)
 }
@@ -324,6 +358,7 @@ onMounted(() => {
     setCSS3DRenderer()
     setRenderer()
     loop()
+    //$viewport.breakpointValue('desktop')
 })
 
 const loop = () => {

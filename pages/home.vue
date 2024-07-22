@@ -135,4 +135,20 @@ function NextView(route: string) {
         }
     }
 }
+
+/* vertical Styles */
+@media (max-width: 1024px) {
+    .intro {
+        p {
+            font-size: 14px;
+        }
+        h3 {
+            font-size: 18px;
+        }
+    }
+
+    .menu {
+        display: none;
+    }
+}
 </style>
