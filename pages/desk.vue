@@ -1,6 +1,6 @@
 <template>
   <div class="absolute-frame">
-    <button @click="NextView" class="next-page">
+    <!-- <button @click="NextView" class="next-page">
         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
             <path d="M36 12L56 32M56 32L36 52M56 32H8" stroke="#EEF6FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -9,7 +9,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
             <path d="M36 12L56 32M56 32L36 52M56 32H8" stroke="#EEF6FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-    </button>
+    </button> -->
   </div>
 </template>
 

@@ -20,9 +20,4 @@ export const pageOrder: Array<pageParams> = [
         id: 3,
         route: '/hobbycorner'
     },
-    {
-        //Add home as last element to create loop
-        id: 4,
-        route: '/home'
-    },
 ]

@@ -39,25 +39,38 @@ let mobile: Ref<boolean | null>
 // })
 
 //camera positions
+// x- = pc, z- = window
 //----- Home ---------
 const posHome = {x: 30, y: 30, z: 50}
 const lookHome = {x: -24, y: -4, z: 0}
 
 //----- Mobile Home --
-const posMobileHome = {x: 72, y: 50, z: 56}
-const lookMobileHome = {x: -22, y: 22, z: -16}
+const posMobileHome = {x: 94, y: 50, z: 72}
+const lookMobileHome = {x: -22, y: 18, z: -16}
 
 //----- The Desk -----
 const posPC = {x: -6, y: 12, z: -10}
 const lookPC = {x: -14, y: 10, z: -10}
 
+//----- Mobile Desk --
+const posMobilePC = {x: 4, y: 12, z: -10}
+const lookMobilePC = {x: -14, y: 10, z: -11}
+
 //----- Roadmap ------
 const posRM = {x: 8, y: 18, z: -6}
 const lookRM = {x: 8, y: 15, z: -7}
 
+//----- Mobile Roadmap ------
+const posMobileRM = {x: 10, y: 20, z: -8}
+const lookMobileRM = {x: 10, y: 8, z: -9.5}
+
 //----- Hobby corner ------
 const posHC = {x: 0, y: 16, z: 0}
 const lookHC = {x: 0, y: 10, z: 20}
+
+//----- Mobile Hobby corner ------
+const posMobileHC = {x: 0, y: 16, z: -12}
+const lookMobileHC = {x: 0, y: 1, z: 20}
 
 //aspect ratio for adjusting scenes
 const { width, height } = useWindowSize()
@@ -86,9 +99,6 @@ function init() {
     //Create scene
     scene = new Scene();
 
-    //Add keylistener
-    document.addEventListener("keydown", KeyAction);
-
     //Add camera
     camera = new PerspectiveCamera(55, aspectRatio.value, 0.1, 1000)
     camera.position.set(30, 30, 50)
@@ -99,7 +109,7 @@ function init() {
     //Add Light 
     //----- Directional light for shadows and sun effect ------
     const directionalLight = new DirectionalLight( 0xffffff, 3 );
-    directionalLight.position.set(18, 36, -45)
+    directionalLight.position.set(18, 29, -45)
     directionalLight.target.position.set(0, 0, 0)
     directionalLight.castShadow = true
     directionalLight.shadow.camera.top = 40
@@ -151,9 +161,9 @@ function init() {
     //----- Load the duck ------
     loader.load( 'models/duckkie.glb', function ( gltf ) {
         duck = gltf
-        duck.scene.position.set(11, 12.2, -9)
+        duck.scene.position.set(11, 12.2, -10.7)
         duck.scene.lookAt(0, 12.2, 3)
-        duck.scene.scale.set(0.5, 0.5, 0.5)
+        duck.scene.scale.set(0.4, 0.4, 0.4)
         scene.add(duck.scene)
 
         mixer = new AnimationMixer(duck.scene)
@@ -177,29 +187,6 @@ function init() {
     cssObject.scale.set(0.0033, 0.0033, 0.0033)
 }
 
-function KeyAction(e: KeyboardEvent) {
-    //right
-    if (e.keyCode == 39) {
-        for (let i=0; i < ( pageOrder.length - 1 ); i++) {
-            if (route.path == pageOrder[i].route) {
-                router.push(pageOrder[i+1].route)
-            }
-        }
-    }
-    //left
-    if (e.keyCode == 37) {
-        for (let i=0; i < ( pageOrder.length - 1 ); i++) {
-            if (route.path == pageOrder[i].route) {
-                router.push(pageOrder[i-1].route)
-            }
-        }
-    }
-    //escape
-    if (e.keyCode == 27) {
-        router.push('/home')
-    }
-}
-
 //Called from parant component to move 
 function goToNextPos(path: string) {
     console.log(path)
@@ -220,29 +207,53 @@ function goToNextPos(path: string) {
         targetZ = lookH.z
     }
     else if (path == '/desk') {
-        valueX = posPC.x
-        valueY = posPC.y
-        valueZ = posPC.z
-        targetX = lookPC.x
-        targetY = lookPC.y
-        targetZ = lookPC.z
+        let posD, lookD
+        if (mobile.value) {
+            posD = posMobilePC
+            lookD = lookMobilePC
+        } else {
+            posD = posPC
+            lookD = lookPC
+        }
+        valueX = posD.x
+        valueY = posD.y
+        valueZ = posD.z
+        targetX = lookD.x
+        targetY = lookD.y
+        targetZ = lookD.z
         pcPower(true)
     }
     else if (path == '/roadmap') {
-        valueX = posRM.x
-        valueY = posRM.y
-        valueZ = posRM.z
-        targetX = lookRM.x
-        targetY = lookRM.y
-        targetZ = lookRM.z
+        let posR, lookR
+        if (mobile.value) {
+            posR = posMobileRM
+            lookR = lookMobileRM
+        } else {
+            posR = posRM
+            lookR = lookRM
+        }
+        valueX = posR.x
+        valueY = posR.y
+        valueZ = posR.z
+        targetX = lookR.x
+        targetY = lookR.y
+        targetZ = lookR.z
     }
     else if (path == '/hobbycorner') {
-        valueX = posHC.x
-        valueY = posHC.y
-        valueZ = posHC.z
-        targetX = lookHC.x
-        targetY = lookHC.y
-        targetZ = lookHC.z
+        let posHobby, lookHobby
+        if (mobile.value) {
+            posHobby = posMobileHC
+            lookHobby = lookMobileHC
+        } else {
+            posHobby = posHC
+            lookHobby = lookHC
+        }
+        valueX = posHobby.x
+        valueY = posHobby.y
+        valueZ = posHobby.z
+        targetX = lookHobby.x
+        targetY = lookHobby.y
+        targetZ = lookHobby.z
     }
     gsap.to(camera.position, {x: valueX, y: valueY, z: valueZ, duration: 2, ease: "power2.inOut"})
     gsap.to(camTarget.position, {x: targetX, y: targetY, z: targetZ, duration: 2, ease: "power2.inOut"})

@@ -1,6 +1,6 @@
 <template>
     <div id="roadmap">
-        <h2 style="margin-bottom: 16px;">Roadmap - Next updates</h2>
+        <h2 style="margin-bottom: 16px;">Roadmap</h2>
         <div class="roadmap-item" :class="{ active: item.value.active }" v-for="(item, index) in roadmap" :key="item.value.header">
             <div class="item-header" @click="ToggleActiveItem(index)">
                 <div class="item-header-number">
@@ -117,6 +117,13 @@ onMounted(() => {
         ul {
             margin: 8px 0 0 0;
         }
+    }
+}
+
+/* Vertical Styles */
+@media (max-width: 1024px) {
+    #roadmap {
+        margin-top: 120px;
     }
 }
 

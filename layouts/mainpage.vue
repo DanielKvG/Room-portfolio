@@ -15,7 +15,7 @@
             <div id="intro-column"></div>
             <div id="controls-column"></div>
         </div>
-        <div class="controlls">
+        <div class="controlls" v-if="!mobile">
             <h2 style="margin-bottom: 16px">Controlls</h2>
             <div class="keys">
                 <div class="vertical-keys">
@@ -56,6 +56,24 @@
                 </div>
             </div>
         </div>
+        <div class="mobilemenu" v-if="mobile">
+            <div class="navbutton" @click="previousPage">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <path d="M14 26L4 16M4 16L14 6M4 16L28 16" stroke="#12072A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="menubutton">
+                <p style="margin: 0; color: #fff;">Home</p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M3.75 6.75H20.25M3.75 12H20.25M3.75 17.25H20.25" stroke="#EEF6FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="navbutton" @click="nextPage">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <path d="M18 6L28 16M28 16L18 26M28 16H4" stroke="#12072A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -63,7 +81,69 @@
 <script setup lang="ts">
 
 let threeScene: Ref = ref(null)
+import { useWindowSize } from '@vueuse/core';
+import { pageOrder } from '~/components/pageOrder';
+
 const router = useRouter()
+const route = useRoute()
+const { width } = useWindowSize()
+const mobile = computed(() => width.value < 1024)
+
+// function screenVersion(width: number) {
+//     if (width > 1024) {
+//         mobile = ref(false)
+//     } else {
+//         mobile = ref(true)
+//     }
+// }
+
+// watch(width, () => {
+//     screenVersion(width.value)
+// })
+
+onMounted(() => {
+    //Add keylistener for shortcuts
+    document.addEventListener("keydown", KeyAction);
+    //screenVersion(width.value)
+})
+
+function KeyAction(e: KeyboardEvent) {
+    //right
+    if (e.keyCode == 39) {
+        nextPage()
+    }
+    //left
+    if (e.keyCode == 37) {
+        previousPage()
+    }
+    //escape
+    if (e.keyCode == 27) {
+        router.push('/home')
+    }
+}
+
+function nextPage() {
+    for (let i=0; i < pageOrder.length; i++) {
+        if (route.path == pageOrder[i].route) {
+            if (i == (pageOrder.length-1)) {
+                //create circle
+                router.push('/home')
+            } else router.push(pageOrder[i+1].route)
+        }
+    }
+}
+
+function previousPage() {
+    let length = pageOrder.length
+    for (let i=0; i < length; i++) {
+        if (route.path == pageOrder[i].route) {
+            if (i == 0) {
+                //create circle
+                router.push(pageOrder[length-1].route)
+            } else router.push(pageOrder[i-1].route)
+        }
+    }
+}
 
 </script>
 
@@ -180,17 +260,56 @@ const router = useRouter()
     }
 }
 
+.mobilemenu {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-shrink: 0;
+    z-index: 11;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0px 16px;
+
+    .menubutton {
+        display: inline-flex;
+        padding: 20px 24px;
+        align-items: center;
+        gap: 16px;
+
+        border-radius: 8px 8px 0px 0px;
+        border-top: 2px solid #D9E9FF;
+        border-right: 2px solid #D9E9FF;
+        border-left: 2px solid #D9E9FF;
+        background: #12072A;
+    }
+
+    .navbutton {
+        display: flex;
+        padding: 8px;
+        align-items: center;
+        margin-bottom: 16px;
+        cursor: pointer;
+
+        border-radius: 8px;
+        background: var(--primary-100, #D9E9FF);
+    }
+}
+
 /* Vertical Styles */
 @media (max-width: 1024px) {
     .html-pagina {
         padding: 24px 16px;
-    }
-    .name {
-        h1 {
-            font-size: 40px;
-        }
-        h2 {
-            font-size: 20px;
+        gap: 80px;
+
+        .name {
+            h1 {
+                font-size: 40px;
+            }
+            h2 {
+                font-size: 20px;
+            }
         }
     }
     
@@ -203,11 +322,11 @@ const router = useRouter()
 
         #intro-column {
             grid-column: 1 / span 7;
-            grid-row: 1 / span 5;
+            grid-row: 1 / span 2;
         }
         #controls-column {
             grid-column: 1 / span 7;
-            grid-row: 6 / span 2;
+            grid-row: 3 / span 1;
         }
     }
 }
