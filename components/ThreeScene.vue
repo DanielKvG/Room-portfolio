@@ -49,12 +49,12 @@ const posMobileHome = {x: 94, y: 50, z: 72}
 const lookMobileHome = {x: -22, y: 18, z: -16}
 
 //----- The Desk -----
-const posPC = {x: -6, y: 12, z: -10}
-const lookPC = {x: -14, y: 10, z: -10}
+const posPC = {x: -4.5, y: 12, z: -10}
+const lookPC = {x: -14, y: 9.7, z: -10}
 
 //----- Mobile Desk --
-const posMobilePC = {x: 4, y: 12, z: -10}
-const lookMobilePC = {x: -14, y: 10, z: -11}
+const posMobilePC = {x: 4, y: 12, z: -10.4}
+const lookMobilePC = {x: -14, y: 10, z: -10.4}
 
 //----- Roadmap ------
 const posRM = {x: 8, y: 18, z: -6}
@@ -140,7 +140,7 @@ function init() {
     //Load the models
     const loader = new GLTFLoader();
     //----- Load the room ------
-    loader.load( 'models/room1.glb', async function ( room ) {
+    loader.load( 'models/room.glb', async function ( room ) {
         room.scene.scale.set(10, 10, 10)
         room.scene.traverse(function(node) {
             if (node.isObject3D) {
@@ -181,7 +181,7 @@ function init() {
     // Create the laptop screen, scene add is on request in function pcPower
     const vueComponent = createVueComponent('1088px', '624px', '/aboutme');
     cssObject = new CSS3DObject(vueComponent);
-    cssObject.position.set(-12.58, 8.69, -9.35);
+    cssObject.position.set(-12.58, 8.69, -10.12);
     cssObject.rotateY(Math.PI / 2)
     cssObject.rotateX(-Math.PI / 16)
     cssObject.scale.set(0.0033, 0.0033, 0.0033)
