@@ -14,15 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-const router = useRouter()
-
 definePageMeta({
   layout: 'mainpage'
 })
-
-function NextView() {
-    router.push({ path: '/' })
-}
 </script>
 
 <style lang="scss">

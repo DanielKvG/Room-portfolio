@@ -1,9 +1,7 @@
 <template>
 
     <div class="page">
-        <ClientOnly class="threeJS">
-            <ThreeScene ref="threeScene"/>
-        </ClientOnly>
+        
         <div class="html-pagina">
             <div class="name">
                 <h1>Dani&euml;l KvG</h1>
@@ -11,6 +9,9 @@
             </div>
             <slot></slot> <!-- route -->
         </div>
+        <ClientOnly class="threeJS">
+            <ThreeScene ref="threeScene"/>
+        </ClientOnly>
         <div class="achtergrond">
             <div id="intro-column"></div>
             <div id="controls-column"></div>
@@ -89,18 +90,6 @@ const route = useRoute()
 const { width } = useWindowSize()
 const mobile = computed(() => width.value < 1024)
 
-// function screenVersion(width: number) {
-//     if (width > 1024) {
-//         mobile = ref(false)
-//     } else {
-//         mobile = ref(true)
-//     }
-// }
-
-// watch(width, () => {
-//     screenVersion(width.value)
-// })
-
 onMounted(() => {
     //Add keylistener for shortcuts
     document.addEventListener("keydown", KeyAction);
@@ -148,10 +137,10 @@ function previousPage() {
 </script>
 
 <style lang="scss">
-.threeJS {
-    pointer-events: none;
+// .threeJS {
+//     //pointer-events: none;
     
-}
+// }
 
 .html-pagina {
     position: absolute;
@@ -166,6 +155,7 @@ function previousPage() {
     padding: 24px 48px;
     gap: 48px;
     color: #fefefe;
+    pointer-events: none;
 
     .name {
         display: flex;
@@ -271,6 +261,7 @@ function previousPage() {
     right: 0;
     bottom: 0;
     padding: 0px 16px;
+    pointer-events: all;
 
     .menubutton {
         display: inline-flex;
@@ -310,23 +301,6 @@ function previousPage() {
             h2 {
                 font-size: 20px;
             }
-        }
-    }
-    
-    .controlls {
-        display: none;
-    }
-
-    .achtergrond {
-        grid-auto-rows: auto;
-
-        #intro-column {
-            grid-column: 1 / span 7;
-            grid-row: 1 / span 2;
-        }
-        #controls-column {
-            grid-column: 1 / span 7;
-            grid-row: 3 / span 1;
         }
     }
 }

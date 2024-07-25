@@ -179,7 +179,7 @@ function init() {
     });
 
     // Create the laptop screen, scene add is on request in function pcPower
-    const vueComponent = createVueComponent('1088px', '624px', '/aboutme');
+    const vueComponent = createVueComponent('1090px', '626px', '/projects');
     cssObject = new CSS3DObject(vueComponent);
     cssObject.position.set(-12.58, 8.69, -10.12);
     cssObject.rotateY(Math.PI / 2)
@@ -303,6 +303,7 @@ function setRenderer() {
         renderer.shadowMap.enabled = true
         renderer.shadowMap.type = PCFSoftShadowMap
         renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.domElement.style.pointerEvents = 'none'
         updateRender();
         container.value.appendChild(renderer.domElement)
     }
@@ -336,6 +337,7 @@ function createVueComponent(width: string, height: string, page: string): HTMLDi
     iframe.height = height      
     iframe.style.width = '100%'
     iframe.style.height = '100%'
+    //iframe.style.zIndex = '20'
     iframe.src = page
     div.appendChild(iframe)
 
@@ -389,5 +391,6 @@ const loop = () => {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  pointer-events: all;
 }
 </style>
