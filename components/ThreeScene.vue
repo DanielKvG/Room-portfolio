@@ -112,11 +112,11 @@ function init() {
     directionalLight.position.set(18, 29, -45)
     directionalLight.target.position.set(0, 0, 0)
     directionalLight.castShadow = true
-    directionalLight.shadow.camera.top = 40
-    directionalLight.shadow.camera.bottom = -40
-    directionalLight.shadow.camera.left = 40
-    directionalLight.shadow.camera.right = -40
-    directionalLight.shadow.camera.near = 5
+    directionalLight.shadow.camera.top = 60
+    directionalLight.shadow.camera.bottom = -60
+    directionalLight.shadow.camera.left = 60
+    directionalLight.shadow.camera.right = -60
+    directionalLight.shadow.camera.near = 1
     directionalLight.shadow.camera.far = 100
     directionalLight.shadow.bias = -0.004
     directionalLight.shadow.mapSize.width = 1024
@@ -134,7 +134,7 @@ function init() {
     scene.add(ambientLight, directionalLight, pointLight);
 
     //Guide for seeing the effective range of the shadow
-    var shadowHelper = new CameraHelper( directionalLight.shadow.camera );
+    //var shadowHelper = new CameraHelper( directionalLight.shadow.camera );
     //scene.add( shadowHelper );
 
     //Load the models

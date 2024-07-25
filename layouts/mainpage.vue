@@ -1,7 +1,6 @@
 <template>
 
     <div class="page">
-        
         <div class="html-pagina">
             <div class="name">
                 <h1>Dani&euml;l KvG</h1>
@@ -301,6 +300,19 @@ function previousPage() {
             h2 {
                 font-size: 20px;
             }
+        }
+    }
+
+    .achtergrond {
+        grid-auto-rows: auto;
+
+        #intro-column {
+            grid-column: 1 / span 7;
+            grid-row: 1 / span 2;
+        }
+        #controls-column {
+            grid-column: 1 / span 7;
+            grid-row: 3 / span 1;
         }
     }
 }
