@@ -124,6 +124,7 @@ onMounted(() => {
 @media (max-width: 1024px) {
     #roadmap {
         margin-top: 120px;
+        pointer-events: all;
     }
 }
 
