@@ -1,7 +1,7 @@
 <template>
 
-    <div class="page">
-        <div class="html-pagina">
+    <div id="page">
+        <div class="html-pagina relative">
             <div class="name">
                 <h1>Dani&euml;l KvG</h1>
                 <h2>Kooyman van Guldener</h2>
@@ -16,7 +16,7 @@
             <div id="controls-column"></div>
         </div>
         <div class="controlls" v-if="!mobile">
-            <h2 style="margin-bottom: 16px">Controlls</h2>
+            <h2 style="margin-bottom: 16px">Keyboard Controlls</h2>
             <div class="keys">
                 <div class="vertical-keys">
                     <div class="key">
@@ -94,6 +94,8 @@ onMounted(() => {
     document.addEventListener("keydown", KeyAction);
     //screenVersion(width.value)
 })
+
+
 
 function KeyAction(e: KeyboardEvent) {
     //right

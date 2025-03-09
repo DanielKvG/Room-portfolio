@@ -1,8 +1,8 @@
 <template>
-    <div id="index-menu">
-        <div class="intro">
-            <span><p>I’m an &nbsp; </p><h3>Industrial design Engineer</h3><p>&nbsp; with</p></span>
-            <span><p>passion for &nbsp;</p><h3>UX</h3><p>&nbsp; - digital and physical.</p></span>
+    <div id="index-menu" class="flex flex-col gap-10" >
+        <div class="intro justify-center align-center mb-8">
+            <span class="flex flex-row items-baseline"><p>I’m an &nbsp; </p><h3>Industrial design Engineer</h3><p>&nbsp; with</p></span>
+            <span class="flex flex-row items-baseline"><p>passion for &nbsp;</p><h3>UX</h3><p>&nbsp; - digital and physical.</p></span>
         </div>
         <div class="menu">
             <div class="menu-item" @click="NextView('/desk')">
@@ -49,28 +49,7 @@ function NextView(route: string) {
 </script>
 
 <style lang="scss">
-#index-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-}
-
 .intro {
-    //padding: 24px 24px 16px 24px;
-    margin-bottom: 56px;
-    justify-content: center;
-    align-items: center;
-
-    border-radius: 8px;
-    //border: 2px solid var(--primary-900, #183590);
-    //background: rgba(187, 218, 255, 0.50);
-
-    span {
-        display: flex; 
-        flex-direction: row; 
-        align-items: baseline;
-    }
-
     h3 {
         font-size: 20px;
         line-height: 120%;
@@ -100,7 +79,7 @@ function NextView(route: string) {
         }
 
         &:hover .menu-iconframe {
-            max-width: 300px;
+            max-width: 400px;
             background: rgba(217, 233, 255, 0.3);
             transition: all 300ms ease-in-out;
         }
@@ -111,9 +90,8 @@ function NextView(route: string) {
             gap: 32px;
             padding: 16px;
             align-items: center;
-            max-width: 40px;
-            height: 40px;
             overflow: visible;
+            max-width: 72px;
 
             border-radius: 16px;
             background: rgba(217, 233, 255, 0.21);
@@ -131,7 +109,6 @@ function NextView(route: string) {
                 white-space: nowrap;
                 line-height: 40px;
                 transition: all 200ms ease-in-out;
-                padding: 16px 0;
             }
         }
     }
