@@ -15,7 +15,7 @@
             <div id="intro-column"></div>
             <div id="controls-column"></div>
         </div>
-        <div class="controlls" v-if="!mobile">
+        <div class="controlls" v-show="!mobile">
             <h2 style="margin-bottom: 16px">Keyboard Controlls</h2>
             <div class="keys">
                 <div class="vertical-keys">
@@ -74,6 +74,7 @@
                 </svg>
             </div>
         </div>
+        
     </div>
 
 </template>

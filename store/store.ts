@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 
 export const useStore = defineStore('store', () => {
     const router = useRouter()
+    const projectsDialog = ref(false)
 
     function navTo(route: string) {
         router.push(route)
@@ -9,8 +10,8 @@ export const useStore = defineStore('store', () => {
 
     function toProjects() {
         console.log('ive been pushed')
-        router.push('/desk/projects')
-        
+        //router.push('/desk/projects')
+        projectsDialog.value = true
     }
 
     function back() {
@@ -18,6 +19,7 @@ export const useStore = defineStore('store', () => {
     }
 
     return {
+        projectsDialog,
         navTo,
         toProjects,
         back,

@@ -1,8 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  css: ['~/assets/css/main.css'],
-
+  //css: ['~/assets/css/main.css'],
+  components: [
+  {
+    path: '~/components',
+    pathPrefix: false
+  }],
   modules: ['@nuxtjs/google-fonts', [
     'nuxt-viewport', {
       viewport: {
@@ -19,14 +23,18 @@ export default defineNuxtConfig({
         },
       },
     }
-  ], '@nuxtjs/tailwindcss', '@pinia/nuxt'],
+  ], '@pinia/nuxt', '@nuxt/ui'],
 
   googleFonts: {
     families: {
       K2D: true
     }
   },
-
+  tailwindcss: {
+    configPath: 'tailwind.config.ts',
+    exposeConfig: true,
+    viewer: true,
+  },
   routeRules: {
     '/': { redirect: '/home' },
   },

@@ -1,10 +1,10 @@
 <template>
-    <div id="index-menu" class="flex flex-col gap-10" >
-        <div class="intro justify-center align-center mb-8">
-            <span class="flex flex-row items-baseline"><p>I’m an &nbsp; </p><h3>Industrial design Engineer</h3><p>&nbsp; with</p></span>
-            <span class="flex flex-row items-baseline"><p>passion for &nbsp;</p><h3>UX</h3><p>&nbsp; - digital and physical.</p></span>
+    <div class="flex flex-col gap-8" >
+        <div class="mb-8 items-baseline">
+            <div class="flex flex-row items-baseline"><p>I’m an &nbsp; </p><h3 class="text-primary-300">Industrial design Engineer</h3><p>&nbsp; with</p></div>
+            <div class="flex flex-row items-baseline"><p>passion for &nbsp;</p><h3 class="text-primary-300">UX</h3><p>&nbsp; - digital and physical.</p></div>
         </div>
-        <div class="menu">
+        <div class="menu flex flex-col gap-8 items-start">
             <div class="menu-item" @click="NextView('/desk')">
                 <div class="menu-iconframe">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -58,11 +58,7 @@ function NextView(route: string) {
 }
 
 .menu {
-    display: flex;
     width: 366px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 40px;
     pointer-events: all;
 
     .menu-item {
@@ -125,8 +121,8 @@ function NextView(route: string) {
         }
     }
 
-    .menu {
-        display: none;
-    }
+    //.menu {
+    //    display: none;
+    //}
 }
 </style>
