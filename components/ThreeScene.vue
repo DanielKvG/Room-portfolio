@@ -60,7 +60,7 @@ const posPC = {x: -2.5, y: 12, z: -10}
 const lookPC = {x: -14, y: 9.7, z: -10}
 
 //----- Mobile Desk --
-const posMobilePC = {x: 4, y: 12, z: -10.4}
+const posMobilePC = {x: 3, y: 12, z: -10.4}
 const lookMobilePC = {x: -14, y: 10, z: -10.4}
 
 //----- Roadmap ------
@@ -104,7 +104,7 @@ function init() {
     scene = new Scene();
 
     //Add camera
-    camera = new PerspectiveCamera(55, aspectRatio.value, 0.1, 1000)
+    camera = new PerspectiveCamera(70, aspectRatio.value, 0.1, 1000)
     camera.position.set(30, 30, 50)
     camTarget.position.set(-24, -4, 0)
     camera.lookAt(camTarget.position)
