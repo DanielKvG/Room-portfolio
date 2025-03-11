@@ -48,12 +48,12 @@ const store = useStore()
 //camera positions
 // x- = pc, z- = window
 //----- Home ---------
-const posHome = {x: 30, y: 30, z: 50}
+const posHome = {x: 27, y: 30, z: 38}
 const lookHome = {x: -24, y: -4, z: 0}
 
 //----- Mobile Home --
-const posMobileHome = {x: 94, y: 50, z: 72}
-const lookMobileHome = {x: -22, y: 18, z: -16}
+const posMobileHome = {x: 64, y: 45, z: 57}
+const lookMobileHome = {x: -22, y: 18, z: -21}
 
 //----- The Desk -----
 const posPC = {x: -2.5, y: 12, z: -10}

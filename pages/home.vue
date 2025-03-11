@@ -4,7 +4,7 @@
             <div class="flex flex-row items-baseline"><p>I’m an &nbsp; </p><h3 class="text-primary-300">Industrial design Engineer</h3><p>&nbsp; with</p></div>
             <div class="flex flex-row items-baseline"><p>passion for &nbsp;</p><h3 class="text-primary-300">UX</h3><p>&nbsp; - digital and physical.</p></div>
         </div>
-        <div class="menu flex flex-col gap-8 items-start">
+        <div class="menu flex-col gap-8 items-start hidden lg:flex">
             <div class="menu-item" @click="NextView('/desk')">
                 <div class="menu-iconframe">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
