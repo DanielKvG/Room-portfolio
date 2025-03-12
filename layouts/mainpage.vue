@@ -15,7 +15,7 @@
             <div id="intro-column"></div>
             <div id="controls-column"></div>
         </div>
-        <div class="controlls" v-show="!mobile">
+        <div class="controlls hidden lg:block">
             <h2 style="margin-bottom: 16px">Keyboard Controlls</h2>
             <div class="keys">
                 <div class="vertical-keys">
@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <div class="mobilemenu" v-if="mobile">
+        <div class="mobilemenu flex lg:hidden">
             <div class="navbutton" @click="previousPage">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                     <path d="M14 26L4 16M4 16L14 6M4 16L28 16" stroke="#12072A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -82,13 +82,10 @@
 <script setup lang="ts">
 
 let threeScene: Ref = ref(null)
-import { useWindowSize } from '@vueuse/core';
 import { pageOrder } from '~/components/pageOrder';
 
 const router = useRouter()
 const route = useRoute()
-const { width } = useWindowSize()
-const mobile = computed(() => width.value < 1024)
 
 onMounted(() => {
     //Add keylistener for shortcuts
@@ -254,7 +251,6 @@ function previousPage() {
 
 .mobilemenu {
     position: absolute;
-    display: flex;
     justify-content: space-between;
     align-items: flex-end;
     flex-shrink: 0;
