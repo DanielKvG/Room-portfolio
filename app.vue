@@ -5,6 +5,7 @@
     </NuxtLayout>
     <!-- Dialogs -->
     <projectsDialog />
+    <menuDialog />
   </div>
 </template>
 
