@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   vite: {
     server: {
-      allowedHosts: true,
+      allowedHosts: ['danielkvg.com', 'www.danielkvg.com'],
     },
   },
   components: [
