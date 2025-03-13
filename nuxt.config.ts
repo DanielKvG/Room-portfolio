@@ -1,7 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  //css: ['~/assets/css/main.css'],
+  vite: {
+    server: {
+      allowedHosts: true,
+    },
+  },
   components: [
   {
     path: '~/components',
