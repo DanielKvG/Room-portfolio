@@ -3,11 +3,19 @@
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+    <!-- Dialogs -->
+    <projectsDialog />
+    <menuDialog />
   </div>
 </template>
 
 <script setup lang="ts">
-
+useHead({
+  title: 'DanielKvG',
+  meta: [{ name: 'description', content: 'Portfolio website van Daniël' }],
+  link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+  htmlAttrs: { lang: 'nl' },
+})
 </script>
 
 

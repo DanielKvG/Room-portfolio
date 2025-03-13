@@ -12,6 +12,9 @@ import content from '../pages/laptop_screen.vue'
 import { texture } from 'three/examples/jsm/nodes/Nodes.js';
 import gsap from 'gsap';
 import { pageOrder } from './pageOrder';
+import { useStore } from '~/store/store';
+
+
 
 let valueX: number
 let valueY: number
@@ -33,6 +36,10 @@ let camTarget: Object3D
 let cssObject: CSS3DObject
 let mobile: Ref<boolean | null>
 
+//store the route
+const route = useRoute()
+const store = useStore()
+
 //Expose functions to parant component
 // defineExpose({
 //     goToNextPos
@@ -41,19 +48,19 @@ let mobile: Ref<boolean | null>
 //camera positions
 // x- = pc, z- = window
 //----- Home ---------
-const posHome = {x: 30, y: 30, z: 50}
+const posHome = {x: 27, y: 30, z: 38}
 const lookHome = {x: -24, y: -4, z: 0}
 
 //----- Mobile Home --
-const posMobileHome = {x: 94, y: 50, z: 72}
-const lookMobileHome = {x: -22, y: 18, z: -16}
+const posMobileHome = {x: 64, y: 45, z: 57}
+const lookMobileHome = {x: -22, y: 18, z: -21}
 
 //----- The Desk -----
-const posPC = {x: -4.5, y: 12, z: -10}
+const posPC = {x: -2.5, y: 12, z: -10}
 const lookPC = {x: -14, y: 9.7, z: -10}
 
 //----- Mobile Desk --
-const posMobilePC = {x: 4, y: 12, z: -10.4}
+const posMobilePC = {x: 3, y: 12, z: -10.4}
 const lookMobilePC = {x: -14, y: 10, z: -10.4}
 
 //----- Roadmap ------
@@ -81,9 +88,6 @@ if (width.value > 1024) {
 } else {
     mobile = ref(true)
 }
-//store the route
-const route = useRoute()
-const router = useRouter()
 
 //Setup function
 function init() {
@@ -100,7 +104,7 @@ function init() {
     scene = new Scene();
 
     //Add camera
-    camera = new PerspectiveCamera(55, aspectRatio.value, 0.1, 1000)
+    camera = new PerspectiveCamera(70, aspectRatio.value, 0.1, 1000)
     camera.position.set(30, 30, 50)
     camTarget.position.set(-24, -4, 0)
     camera.lookAt(camTarget.position)
@@ -140,7 +144,7 @@ function init() {
     //Load the models
     const loader = new GLTFLoader();
     //----- Load the room ------
-    loader.load( 'models/room.glb', async function ( room ) {
+    loader.load( 'models/room1.glb', async function ( room ) {
         room.scene.scale.set(10, 10, 10)
         room.scene.traverse(function(node) {
             if (node.isObject3D) {
@@ -179,7 +183,7 @@ function init() {
     });
 
     // Create the laptop screen, scene add is on request in function pcPower
-    const vueComponent = createVueComponent('1090px', '626px', '/projects');
+    const vueComponent = createVueComponent('1090px', '626px', 'desk/projectsScreen');
     cssObject = new CSS3DObject(vueComponent);
     cssObject.position.set(-12.58, 8.69, -10.12);
     cssObject.rotateY(Math.PI / 2)
@@ -330,16 +334,21 @@ function createVueComponent(width: string, height: string, page: string): HTMLDi
     div.style.width = width;
     div.style.height = height;
     div.style.border = '1px solid black'
+    div.id = 'toProjects'
+    div.style.cursor = 'pointer'
 
     // iframe to hold the page
     const iframe = document.createElement('iframe')
+    
     iframe.width = width
     iframe.height = height      
     iframe.style.width = '100%'
     iframe.style.height = '100%'
-    //iframe.style.zIndex = '20'
+    iframe.style.pointerEvents = 'none'
     iframe.src = page
     div.appendChild(iframe)
+
+    div.addEventListener("click", store.toProjects, false)
 
     return div;
 };

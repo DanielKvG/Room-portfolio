@@ -10,10 +10,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/ui": "^2.21.1",
     "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/tailwindcss": "latest",
+    "@pinia/nuxt": "^0.10.1",
     "gsap": "^3.12.5",
     "nuxt": "^3.11.2",
     "nuxt-viewport": "^2.1.5",
+    "pinia": "^3.0.1",
     "three": "^0.164.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"

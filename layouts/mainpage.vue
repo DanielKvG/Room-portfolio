@@ -1,7 +1,7 @@
 <template>
 
-    <div class="page">
-        <div class="html-pagina">
+    <div id="page">
+        <div class="html-pagina relative pointer-events-none">
             <div class="name">
                 <h1>Dani&euml;l KvG</h1>
                 <h2>Kooyman van Guldener</h2>
@@ -15,8 +15,8 @@
             <div id="intro-column"></div>
             <div id="controls-column"></div>
         </div>
-        <div class="controlls" v-if="!mobile">
-            <h2 style="margin-bottom: 16px">Controlls</h2>
+        <div class="controlls hidden lg:block">
+            <h2 style="margin-bottom: 16px">Keyboard Controlls</h2>
             <div class="keys">
                 <div class="vertical-keys">
                     <div class="key">
@@ -56,24 +56,23 @@
                 </div>
             </div>
         </div>
-        <div class="mobilemenu" v-if="mobile">
-            <div class="navbutton" @click="previousPage">
+        <div class="mobilemenu flex enable-pointer-events lg:hidden">
+            <div class="navbutton bg-primary-100 rounded-lg" @click="previousPage">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                     <path d="M14 26L4 16M4 16L14 6M4 16L28 16" stroke="#12072A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <div class="menubutton">
-                <p style="margin: 0; color: #fff;">Home</p>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M3.75 6.75H20.25M3.75 12H20.25M3.75 17.25H20.25" stroke="#EEF6FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+            <div class="flex flex-row items-center px-8 pt-3 pb-6 bg-primary-100 rounded-t-lg gap-2" @click="store.menuDialog = true">
+                <p class="m-0 text-gray-950 text-lg">Home</p>
+                <UIcon name="i-heroicons-bars-3" size="24px"/>
             </div>
-            <div class="navbutton" @click="nextPage">
+            <div class="navbutton bg-primary-100 rounded-lg" @click="nextPage">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                     <path d="M18 6L28 16M28 16L18 26M28 16H4" stroke="#12072A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
         </div>
+        
     </div>
 
 </template>
@@ -81,19 +80,20 @@
 <script setup lang="ts">
 
 let threeScene: Ref = ref(null)
-import { useWindowSize } from '@vueuse/core';
 import { pageOrder } from '~/components/pageOrder';
+import { useStore } from '~/store/store';
 
 const router = useRouter()
 const route = useRoute()
-const { width } = useWindowSize()
-const mobile = computed(() => width.value < 1024)
+const store = useStore()
 
 onMounted(() => {
     //Add keylistener for shortcuts
     document.addEventListener("keydown", KeyAction);
     //screenVersion(width.value)
 })
+
+
 
 function KeyAction(e: KeyboardEvent) {
     //right
@@ -154,7 +154,6 @@ function previousPage() {
     padding: 24px 48px;
     gap: 48px;
     color: #fefefe;
-    pointer-events: none;
 
     .name {
         display: flex;
@@ -249,9 +248,12 @@ function previousPage() {
     }
 }
 
+.enablePointerEvents {
+    pointer-events: all;
+}
+
 .mobilemenu {
     position: absolute;
-    display: flex;
     justify-content: space-between;
     align-items: flex-end;
     flex-shrink: 0;
@@ -281,9 +283,6 @@ function previousPage() {
         align-items: center;
         margin-bottom: 16px;
         cursor: pointer;
-
-        border-radius: 8px;
-        background: var(--primary-100, #D9E9FF);
     }
 }
 
