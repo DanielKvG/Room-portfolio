@@ -2,10 +2,10 @@
 
     <div id="page">
         <div class="html-pagina relative pointer-events-none">
-            <div class="name">
+            <!-- <div class="name">
                 <h1>Dani&euml;l KvG</h1>
                 <h2>Kooyman van Guldener</h2>
-            </div>
+            </div> -->
             <slot></slot> <!-- route -->
         </div>
         <ClientOnly class="threeJS">
@@ -63,7 +63,7 @@
                 </svg>
             </div>
             <div class="flex flex-row items-center px-8 pt-3 pb-6 bg-primary-100 rounded-t-lg gap-2" @click="store.menuDialog = true">
-                <p class="m-0 text-gray-950 text-lg">Home</p>
+                <p class="m-0 text-gray-950 text-lg">{{ currentRoute }}</p>
                 <UIcon name="i-heroicons-bars-3" size="24px"/>
             </div>
             <div class="navbutton bg-primary-100 rounded-lg" @click="nextPage">
@@ -86,6 +86,7 @@ import { useStore } from '~/store/store';
 const router = useRouter()
 const route = useRoute()
 const store = useStore()
+const currentRoute = computed(() => route.name)
 
 onMounted(() => {
     //Add keylistener for shortcuts
@@ -209,19 +210,19 @@ function previousPage() {
 
 .controlls {
     position: absolute;
-    bottom: 16px;
+    bottom: 64px;
     right: 32px;
     padding: 24px;
     background: rgba(217, 233, 255, 0.50);
 
     .keys {
         display: flex;
-        flex-direction: column;
-        gap: 24px;
+        flex-direction: row;
+        gap: 16px;
 
         .vertical-keys {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             gap: 24px;
 
             .key {

@@ -5,13 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import { AmbientLight, Color, PerspectiveCamera, Scene, WebGLRenderer, AnimationMixer, Clock, PointLight, Vector3, HemisphereLight, DirectionalLight, Object3D, MeshPhongMaterial, NoBlending, BoxGeometry, Mesh, Group, DoubleSide, MeshBasicMaterial, PlaneGeometry, BasicShadowMap, PCFSoftShadowMap, CameraHelper, PCFShadowMap, CullFaceBack } from 'three';
+import { AmbientLight, Color, PerspectiveCamera, Scene, WebGLRenderer, AnimationMixer, Clock, PointLight, Vector3, HemisphereLight, DirectionalLight, Object3D, MeshPhongMaterial, NoBlending, BoxGeometry, Mesh, Group, DoubleSide, MeshBasicMaterial, PlaneGeometry, BasicShadowMap, PCFSoftShadowMap, CameraHelper, PCFShadowMap, CullFaceBack, LoopOnce } from 'three';
 import { useWindowSize } from '@vueuse/core';
 import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/Addons.js';
-import content from '../pages/laptop_screen.vue'
-import { texture } from 'three/examples/jsm/nodes/Nodes.js';
 import gsap from 'gsap';
-import { pageOrder } from './pageOrder';
 import { useStore } from '~/store/store';
 
 
@@ -28,6 +25,9 @@ let DOMrenderer: CSS3DRenderer
 //let controls: OrbitControls
 let mixer: any
 let duck: GLTF
+let room: GLTF
+let openDoor: any
+let duckIdle: any
 let camera: PerspectiveCamera
 let scene: Scene
 let container: Ref<HTMLCanvasElement | null>
@@ -38,6 +38,7 @@ let mobile: Ref<boolean | null>
 
 //store the route
 const route = useRoute()
+const router = useRouter()
 const store = useStore()
 
 //Expose functions to parant component
@@ -46,38 +47,45 @@ const store = useStore()
 // })
 
 //camera positions
-// x- = pc, z- = window
+// x = kamer 2 1, z = deur raam
+//----- Home OLD ---------
+//const posHome = {x: 27, y: 30, z: 38}
+//const lookHome = {x: -24, y: -4, z: 0}
+
 //----- Home ---------
-const posHome = {x: 27, y: 30, z: 38}
-const lookHome = {x: -24, y: -4, z: 0}
+const posHome = {x: -5, y: 14, z: 45, duration: 3}
+const lookHome = {x: -5, y: 10, z: -45, duration: 3}
+
+//----- Door ---------
+const posDoor = {x: -9, y: 14, z: 25, duration: 3}
 
 //----- Mobile Home --
-const posMobileHome = {x: 64, y: 45, z: 57}
-const lookMobileHome = {x: -22, y: 18, z: -21}
+const posMobileHome = {x: -15.5, y: 14, z: 62, duration: 3}
+const lookMobileHome = {x: -15.5, y: 10, z: -45, duration: 3}
 
 //----- The Desk -----
-const posPC = {x: -2.5, y: 12, z: -10}
-const lookPC = {x: -14, y: 9.7, z: -10}
+const posPC = {x: -2.5, y: 12, z: -10, duration: 3}
+const lookPC = {x: -14, y: 9.7, z: -10, duration: 3}
 
 //----- Mobile Desk --
-const posMobilePC = {x: 3, y: 12, z: -10.4}
-const lookMobilePC = {x: -14, y: 10, z: -10.4}
+const posMobilePC = {x: 3, y: 12, z: -10.4, duration: 3}
+const lookMobilePC = {x: -14, y: 10, z: -10.4, duration: 3}
 
 //----- Roadmap ------
-const posRM = {x: 8, y: 18, z: -6}
-const lookRM = {x: 8, y: 15, z: -7}
+const posRM = {x: 0, y: 16, z: -8, duration: 3}
+const lookRM = {x: 20, y: 13, z: -9, duration: 3}
 
 //----- Mobile Roadmap ------
-const posMobileRM = {x: 10, y: 20, z: -8}
-const lookMobileRM = {x: 10, y: 8, z: -9.5}
+const posMobileRM = {x: 3, y: 15, z: -0, duration: 3}
+const lookMobileRM = {x: 10, y: 12, z: -11, duration: 3}
 
 //----- Hobby corner ------
-const posHC = {x: 0, y: 16, z: 0}
-const lookHC = {x: 0, y: 10, z: 20}
+const posHC = {x: 0, y: 16, z: -6, duration: 3}
+const lookHC = {x: 16, y: 12, z: 20, duration: 3}
 
 //----- Mobile Hobby corner ------
-const posMobileHC = {x: 0, y: 16, z: -12}
-const lookMobileHC = {x: 0, y: 1, z: 20}
+const posMobileHC = {x: -8, y: 16, z: -13, duration: 3}
+const lookMobileHC = {x: 16, y: 10, z: 20, duration: 3}
 
 //aspect ratio for adjusting scenes
 const { width, height } = useWindowSize()
@@ -112,30 +120,53 @@ function init() {
 
     //Add Light 
     //----- Directional light for shadows and sun effect ------
-    const directionalLight = new DirectionalLight( 0xffffff, 3 );
-    directionalLight.position.set(18, 29, -45)
-    directionalLight.target.position.set(0, 0, 0)
-    directionalLight.castShadow = true
-    directionalLight.shadow.camera.top = 60
-    directionalLight.shadow.camera.bottom = -60
-    directionalLight.shadow.camera.left = 60
-    directionalLight.shadow.camera.right = -60
-    directionalLight.shadow.camera.near = 1
-    directionalLight.shadow.camera.far = 100
-    directionalLight.shadow.bias = -0.004
-    directionalLight.shadow.mapSize.width = 1024
-    directionalLight.shadow.mapSize.height = 1024
-    directionalLight.shadow.radius = 3
-    directionalLight.shadow.blurSamples = 10
+    // const directionalLight = new DirectionalLight( 0xffffff, 3 );
+    // directionalLight.position.set(18, 29, -45)
+    // directionalLight.target.position.set(0, 0, 0)
+    // directionalLight.castShadow = false
+    // directionalLight.shadow.camera.top = 60
+    // directionalLight.shadow.camera.bottom = -60
+    // directionalLight.shadow.camera.left = 60
+    // directionalLight.shadow.camera.right = -60
+    // directionalLight.shadow.camera.near = 1
+    // directionalLight.shadow.camera.far = 100
+    // directionalLight.shadow.bias = -0.004
+    // directionalLight.shadow.mapSize.width = 1024
+    // directionalLight.shadow.mapSize.height = 1024
+    // directionalLight.shadow.radius = 3
+    // directionalLight.shadow.blurSamples = 10
     //----- AmbientLight for lighting up unlit faces ------
-    const ambientLight = new AmbientLight(404040, 1.5);
-    //----- PointLight for indoor lightbulb ------
+    const ambientLight = new AmbientLight(0xffffff, 1);
+
+    //----- PointLight for indoor lightbulb, shadow needed for outside ------
     const pointLight = new PointLight(0xffffbb, 400)
+    pointLight.castShadow = false
+    // pointLight.shadow.camera.near = 1
+    // pointLight.shadow.camera.far = 100
+    // pointLight.shadow.bias = -0.004
+    // pointLight.shadow.mapSize.width = 1024
+    // pointLight.shadow.mapSize.height = 1024
+    // pointLight.shadow.radius = 3
+    // pointLight.shadow.blurSamples = 10
     pointLight.position.x = 4
     pointLight.position.y = 20
     pointLight.position.z = 3
+
+    //----- PointLight for indoor lightbulb, shadow needed for outside ------
+    // const hallLight = new PointLight(0xffffbb, 400)
+    // hallLight.castShadow = false
+    // hallLight.shadow.camera.near = 1
+    // hallLight.shadow.camera.far = 100
+    // hallLight.shadow.bias = -0.004
+    // hallLight.shadow.mapSize.width = 1024
+    // hallLight.shadow.mapSize.height = 1024
+    // hallLight.shadow.radius = 3
+    // hallLight.shadow.blurSamples = 10
+    // hallLight.position.x = 0
+    // hallLight.position.y = 23
+    // hallLight.position.z = 35
     //----- Add lights to the scene ------
-    scene.add(ambientLight, directionalLight, pointLight);
+    scene.add(ambientLight);
 
     //Guide for seeing the effective range of the shadow
     //var shadowHelper = new CameraHelper( directionalLight.shadow.camera );
@@ -144,7 +175,8 @@ function init() {
     //Load the models
     const loader = new GLTFLoader();
     //----- Load the room ------
-    loader.load( 'models/room1.glb', async function ( room ) {
+    loader.load( 'models/room1.glb', async function ( gltf ) {
+        room = gltf
         room.scene.scale.set(10, 10, 10)
         room.scene.traverse(function(node) {
             if (node.isObject3D) {
@@ -156,6 +188,13 @@ function init() {
             }
         })
         scene.add(room.scene)
+        console.log(room.scene)
+        mixer = new AnimationMixer(room.scene)
+        openDoor = mixer.clipAction(room.animations[0])
+        openDoor.setLoop(LoopOnce)
+
+        var delta = clock.getDelta()
+        mixer.update( delta )
 
         // Set timeout of 500ms to move to desired position only after the model has loaded
         await new Promise(f => setTimeout(f, 500));
@@ -165,15 +204,15 @@ function init() {
     //----- Load the duck ------
     loader.load( 'models/duckkie.glb', function ( gltf ) {
         duck = gltf
-        duck.scene.position.set(11, 12.2, -10.7)
-        duck.scene.lookAt(0, 12.2, 3)
+        duck.scene.position.set(9.5, 11.1, -9)
+        duck.scene.lookAt(0, 11.1, -5)
         duck.scene.scale.set(0.4, 0.4, 0.4)
         scene.add(duck.scene)
 
         mixer = new AnimationMixer(duck.scene)
         const walk = mixer.clipAction(duck.animations[5])
-        const idle = mixer.clipAction(duck.animations[3])
-        idle.play()
+        duckIdle = mixer.clipAction(duck.animations[3])
+        duckIdle.play()
 
         var delta = clock.getDelta()
         mixer.update( delta )
@@ -192,75 +231,72 @@ function init() {
 }
 
 //Called from parant component to move 
-function goToNextPos(path: string) {
+async function goToNextPos(path: string, previous?: any) {
     console.log(path)
+    let camRoute: Array<{x?: number, y?: number, z?: number, duration?: number}> = []
+    let camView: {x: number, y: number, z: number} = {x: 0, y: 0, z: 0}
     if (path == '/home') {
-        let posH, lookH
-        if (mobile.value) {
-            posH = posMobileHome
-            lookH = lookMobileHome
-        } else {
-            posH = posHome
-            lookH = lookHome
+        if (previous) {
+            openDoor.stop()
+            openDoor.play()
+            camRoute.push(posDoor)
         }
-        valueX = posH.x
-        valueY = posH.y
-        valueZ = posH.z
-        targetX = lookH.x
-        targetY = lookH.y
-        targetZ = lookH.z
+        if (mobile.value) {
+            camRoute.push(posMobileHome)
+            camView = lookMobileHome
+        } else {
+            camRoute.push(posHome)
+            camView = lookHome
+        }
     }
     else if (path == '/desk') {
-        let posD, lookD
-        if (mobile.value) {
-            posD = posMobilePC
-            lookD = lookMobilePC
-        } else {
-            posD = posPC
-            lookD = lookPC
+        if (previous == '/home') {
+            openDoor.stop()
+            openDoor.play()
+            camRoute.push(posDoor)
         }
-        valueX = posD.x
-        valueY = posD.y
-        valueZ = posD.z
-        targetX = lookD.x
-        targetY = lookD.y
-        targetZ = lookD.z
+        if (mobile.value) {
+            camRoute.push(posMobilePC)
+            camView = lookMobilePC
+        } else {
+            camRoute.push(posPC)
+            camView = lookPC
+        }
         pcPower(true)
     }
     else if (path == '/roadmap') {
-        let posR, lookR
-        if (mobile.value) {
-            posR = posMobileRM
-            lookR = lookMobileRM
-        } else {
-            posR = posRM
-            lookR = lookRM
+        if (previous == '/home') {
+            openDoor.stop()
+            openDoor.play()
+            camRoute.push(posDoor)
         }
-        valueX = posR.x
-        valueY = posR.y
-        valueZ = posR.z
-        targetX = lookR.x
-        targetY = lookR.y
-        targetZ = lookR.z
+        if (mobile.value) {
+            camRoute.push(posMobileRM)
+            camView = lookMobileRM
+        } else {
+            camRoute.push(posRM)
+            camView = lookRM
+        }
     }
     else if (path == '/hobbycorner') {
-        let posHobby, lookHobby
-        if (mobile.value) {
-            posHobby = posMobileHC
-            lookHobby = lookMobileHC
-        } else {
-            posHobby = posHC
-            lookHobby = lookHC
+        if (previous == '/home') {
+            openDoor.stop()
+            openDoor.play()
+            camRoute.push(posDoor)
         }
-        valueX = posHobby.x
-        valueY = posHobby.y
-        valueZ = posHobby.z
-        targetX = lookHobby.x
-        targetY = lookHobby.y
-        targetZ = lookHobby.z
+        if (mobile.value) {
+            camRoute.push(posMobileHC)
+            camView = lookMobileHC
+        } else {
+            camRoute.push(posHC)
+            camView = lookHC
+        }
     }
-    gsap.to(camera.position, {x: valueX, y: valueY, z: valueZ, duration: 2, ease: "power2.inOut"})
-    gsap.to(camTarget.position, {x: targetX, y: targetY, z: targetZ, duration: 2, ease: "power2.inOut"})
+
+    gsap.to(camera.position, {keyframes: [...camRoute], ease: "power2.inOut"})
+    
+    //gsap.to(camera.position, {x: valueX, y: valueY, z: valueZ, duration: 2, ease: "power2.inOut"})
+    gsap.to(camTarget.position, {...camView, duration: 3, ease: "power2.inOut"})
 }
 
 //turn on or off pc
@@ -304,8 +340,8 @@ function setRenderer() {
     if (container.value) {
         renderer = new WebGLRenderer({ antialias: true });
         renderer.setClearColor( 0x000000, 0 );
-        renderer.shadowMap.enabled = true
-        renderer.shadowMap.type = PCFSoftShadowMap
+        // renderer.shadowMap.enabled = true
+        // renderer.shadowMap.type = PCFSoftShadowMap
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.domElement.style.pointerEvents = 'none'
         updateRender();
@@ -373,7 +409,11 @@ watch(() => route.fullPath, () => {
     if (route.path != '/desk') {
         pcPower(false)
     }
-    goToNextPos(route.path)
+    if (router.options.history.state.back) {
+        
+    }
+
+    goToNextPos(route.path, router.options.history.state.back)
 })
 
 onMounted(() => {
