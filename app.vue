@@ -13,7 +13,10 @@
 useHead({
   title: 'DanielKvG',
   meta: [{ name: 'description', content: 'Portfolio website van Daniël' }],
-  link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+  link: [
+    { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    { rel: 'stylesheet', type: 'text/css', href:"https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"}
+  ],
   htmlAttrs: { lang: 'nl' },
 })
 </script>

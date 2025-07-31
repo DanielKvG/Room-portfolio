@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
-      allowedHosts: ['danielkvg.com', 'www.danielkvg.com'],
+      allowedHosts: ['danielkvg.com', 'www.danielkvg.com', 'https://www.danielkvg.com'],
     },
   },
   components: [
@@ -43,8 +43,7 @@ export default defineNuxtConfig({
     viewer: true,
   },
   routeRules: {
-    '/': { redirect: '/home' },
+    //'/': { redirect: '/home' },
   },
-
   compatibilityDate: '2024-12-11',
 })
