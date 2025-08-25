@@ -5,11 +5,10 @@
 </template>
 
 <script lang="ts" setup>
-import { AmbientLight, Color, PerspectiveCamera, Scene, WebGLRenderer, AnimationMixer, Clock, PointLight, Vector3, HemisphereLight, DirectionalLight, Object3D, MeshPhongMaterial, NoBlending, BoxGeometry, Mesh, Group, DoubleSide, MeshBasicMaterial, PlaneGeometry, BasicShadowMap, PCFSoftShadowMap, CameraHelper, PCFShadowMap, CullFaceBack, LoopOnce, MOUSE } from 'three';
+import { AmbientLight, PerspectiveCamera, Scene, WebGLRenderer, Clock, HemisphereLight, DirectionalLight, Object3D, Raycaster, Vector2, Mesh, MeshBasicMaterial, MeshPhongMaterial, Material, Color } from 'three';
 import { useWindowSize } from '@vueuse/core';
-import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/Addons.js';
-import gsap from 'gsap';
 import { useStore } from '~/store/store';
+import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/Addons.js';
 
 let renderer: WebGLRenderer
 let controls: OrbitControls
@@ -20,6 +19,15 @@ let container: Ref<HTMLCanvasElement | null>
 let clock: Clock
 let camTarget: Object3D
 let mobile: Ref<boolean | null>
+let hoverItem: Object3D
+let moved: boolean
+let matBuffer: Array<Material> = []
+
+const raycaster = new Raycaster()
+const store = useStore()
+const highlighted = computed(() => store.highlighted)
+const pages = ['bureau', 'statafel', 'piano']
+
   
 //aspect ratio for adjusting scenes
 const { width, height } = useWindowSize()
@@ -81,6 +89,7 @@ function init() {
     loader.load( 'models/basicRoom.glb', function ( gltf ) {
         basicRoom = gltf
         basicRoom.scene.position.set(0, -2, 0)
+        console.log(basicRoom.scene.children)
         scene.add(basicRoom.scene)
     })
 }
@@ -120,7 +129,7 @@ function setOrbitControls() {
     else controls.maxDistance = 8
     controls.maxPolarAngle = Math.PI / 2
 
-    controls.autoRotate = true
+    //controls.autoRotate = true
 }
 
 //Add animations
@@ -129,18 +138,75 @@ function animate() {
     renderer.render(scene, camera)
 }
 
+function checkIntersection(event: MouseEvent): Object3D | undefined {
+    const coords = new Vector2(
+        (event.clientX / renderer.domElement.clientWidth) * 2 - 1,
+        - ((event.clientY / renderer.domElement.clientHeight) * 2 - 1)
+    )
+
+    raycaster.setFromCamera(coords, camera)
+    const intersections = raycaster.intersectObject(basicRoom.scene, true)
+
+    if (intersections.length > 0) {
+        return intersections[0].object.parent!
+    }
+}
+
+//Object hover function
+function onHighlight(event: MouseEvent) {
+    moved = true
+    const object = checkIntersection(event)
+    if (object === store.highlighted) return
+    else if (object && pages.includes(object.name)) store.highlighted = object
+}
+
+//Object click function
+function onSelect(event: MouseEvent) {
+    if (moved === false) {
+        const object = checkIntersection(event)
+        if (object && pages.includes(object.name)) {
+            store.setSelected(object)
+        }
+    }
+}
+
+function highlight(child: Object3D) {
+    const mesh = <Mesh>child
+    const mat = <Material>mesh.material
+    matBuffer.push(mat)
+    mesh.material = new MeshBasicMaterial()
+}
+
+function resetMat(child: Object3D) {
+    const mesh = <Mesh>child
+    mesh.material = matBuffer[0]
+    matBuffer.splice(0, 1)
+}
+
 init()
 
 //client side renderer
 watch(aspectRatio, () => {
-    updateCamera();
-    updateRender();
+    updateCamera()
+    updateRender()
+})
+
+watch(highlighted, (newHighlighted: Object3D, oldHighlighted: Object3D) => {
+    if (oldHighlighted) {
+        oldHighlighted.children.forEach(resetMat)
+    }
+    newHighlighted.children.forEach(highlight)
 })
 
 onMounted(() => {
     setRenderer()
     setOrbitControls()
     renderer.setAnimationLoop(animate)
+    document.addEventListener('mousemove', onHighlight)
+    document.addEventListener('pointerup', onSelect)
+    document.addEventListener('pointerdown', function() {
+        moved = false
+    })
 })
 
 </script>
