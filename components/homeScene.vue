@@ -1,7 +1,11 @@
 <template>
-
-    <div class="absolute top-0 left-0 w-full h-full" ref="container"></div>
-
+    <div id="dragfield" class="absolute left-0 right-0 top-0 bottom-0 flex flex-col justify-center pointer-events-auto">
+        <div 
+            class="h-96 transition-all duration-800 ease-in-out" 
+            :class="{'h-full': !store.page.open}" 
+            ref="container">
+        </div>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -32,7 +36,7 @@ const el = useTemplateRef('container')
 const size = reactive(useElementSize(el, {width: 0, height: 0}))
 
 const aspectRatio = computed(() => size.width / size.height)
-const mobile = computed(() => size.width < 1024)
+const mobile = computed(() => useWindowSize().width.value < 1024)
 
 //Setup function
 function init() {
@@ -45,7 +49,7 @@ function init() {
     //Create scene
     scene = new Scene();
 
-    //Initialize container
+    //Initialize container & dragfield
     container = null
 
     //Add camera
@@ -115,7 +119,16 @@ function setRenderer() {
 
 //Add orbit controls
 function setOrbitControls() {
-    controls = new OrbitControls( camera, renderer.domElement)
+
+    const dragfield = document.getElementById('dragfield')
+    if (!dragfield) return
+    dragfield.addEventListener('mousemove', onHighlight)
+    dragfield.addEventListener('pointerup', onSelect)
+    dragfield.addEventListener('pointerdown', function() {
+        moved = false
+    })
+
+    controls = new OrbitControls( camera, dragfield)
     controls.target.set(0, -1, 0)
     controls.enablePan = false
     controls.enableDamping = true
@@ -153,6 +166,7 @@ function onHighlight(event: MouseEvent) {
     const object = checkIntersection(event)
     if (object === store.highlighted) return
     else if (object && pages.includes(object.name)) store.highlighted = object
+    else store.highlighted = null
 }
 
 //Object click function
@@ -162,6 +176,7 @@ function onSelect(event: MouseEvent) {
         if (object && pages.includes(object.name)) {
             store.setSelected(object)
         }
+        else store.closePage()
     }
 }
 
@@ -184,7 +199,9 @@ watch(highlighted, (newHighlighted: Object3D, oldHighlighted: Object3D) => {
     if (oldHighlighted) {
         oldHighlighted.children.forEach(resetMat)
     }
-    newHighlighted.children.forEach(highlight)
+    if (newHighlighted) {
+        newHighlighted.children.forEach(highlight)
+    }
 })
 
 //client side renderer
@@ -197,11 +214,6 @@ onMounted(() => {
     setRenderer()
     setOrbitControls()
     renderer.setAnimationLoop(animate)
-    document.addEventListener('mousemove', onHighlight)
-    document.addEventListener('pointerup', onSelect)
-    document.addEventListener('pointerdown', function() {
-        moved = false
-    })
 })
 
 </script>

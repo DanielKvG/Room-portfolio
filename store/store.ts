@@ -27,10 +27,17 @@ export const useStore = defineStore('store', () => {
 
     function setSelected(item: Object3D) {
         selected.value = item
+        page.value.subject = item.name
+        page.value.open = true
     }
 
     function setHighlighted(item: Object3D) {
         highlighted.value = item
+    }
+
+    function closePage() {
+        page.value.subject = ''
+        page.value.open = false
     }
 
     return {
@@ -43,6 +50,7 @@ export const useStore = defineStore('store', () => {
         toProjects,
         back,
         setSelected,
-        setHighlighted
+        setHighlighted,
+        closePage,
     }
 })
