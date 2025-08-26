@@ -5,6 +5,10 @@ export const useStore = defineStore('store', () => {
     const router = useRouter()
     const projectsDialog = ref(false)
     const menuDialog = ref(false)
+    const page = ref({
+        open: false,
+        subject: ''
+    })
     const selected = ref<any>()
     const highlighted = ref<any>()
 
@@ -34,6 +38,7 @@ export const useStore = defineStore('store', () => {
         menuDialog,
         selected,
         highlighted,
+        page,
         navTo,
         toProjects,
         back,

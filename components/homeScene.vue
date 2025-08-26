@@ -1,12 +1,12 @@
 <template>
-    <div>
-        <div ref="container" class="scene-container"></div>
-    </div>
+
+    <div class="absolute top-0 left-0 w-full h-full" ref="container"></div>
+
 </template>
 
 <script lang="ts" setup>
 import { AmbientLight, PerspectiveCamera, Scene, WebGLRenderer, Clock, HemisphereLight, DirectionalLight, Object3D, Raycaster, Vector2, Mesh, MeshBasicMaterial, MeshPhongMaterial, Material, Color } from 'three';
-import { useWindowSize } from '@vueuse/core';
+import { useElementSize, useWindowSize, type MaybeComputedElementRef } from '@vueuse/core';
 import { useStore } from '~/store/store';
 import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/Addons.js';
 
@@ -15,43 +15,38 @@ let controls: OrbitControls
 let basicRoom: GLTF
 let camera: PerspectiveCamera
 let scene: Scene
-let container: Ref<HTMLCanvasElement | null>
+let container: HTMLCanvasElement | null
 let clock: Clock
 let camTarget: Object3D
-let mobile: Ref<boolean | null>
-let hoverItem: Object3D
 let moved: boolean
 let matBuffer: Array<Material> = []
+let width: Ref<number> = ref(0)
+let height: Ref<number> = ref(0)
 
 const raycaster = new Raycaster()
 const store = useStore()
 const highlighted = computed(() => store.highlighted)
 const pages = ['bureau', 'statafel', 'piano']
 
-  
-//aspect ratio for adjusting scenes
-const { width, height } = useWindowSize()
-const aspectRatio = computed(() => width.value / height.value)
-if (width.value > 1024) {
-    console.log(width.value)
-    mobile = ref(false)
-} else {
-    mobile = ref(true)
-}
+const el = useTemplateRef('container')
+const size = reactive(useElementSize(el, {width: 0, height: 0}))
+
+const aspectRatio = computed(() => size.width / size.height)
+const mobile = computed(() => size.width < 1024)
 
 //Setup function
 function init() {
     //Initialize clock for animations
     clock = new Clock()
 
-    //Initialize refs WebGL- and CSS3Drenderer container
-    container = ref(null)
-
     //Initialize a new 3D object for the camera to look at
     camTarget = new Object3D()
 
     //Create scene
     scene = new Scene();
+
+    //Initialize container
+    container = null
 
     //Add camera
     camera = new PerspectiveCamera(70, aspectRatio.value, 0.1, 1000)
@@ -96,7 +91,7 @@ function init() {
 
 //Update functions
 function updateRender() {
-    renderer.setSize(width.value, height.value)
+    renderer.setSize(size.width, size.height)
     renderer.render(scene, camera)
 }
 
@@ -107,14 +102,14 @@ function updateCamera() {
 
 //Add Renderer
 function setRenderer() {
-    if (container.value) {
-        renderer = new WebGLRenderer({ antialias: true });
-        renderer.setClearColor( 0x000000, 0 );
+    if (container) {
+        renderer = new WebGLRenderer({ antialias: true })
+        renderer.setClearColor( 0x000000, 0 )
         // renderer.shadowMap.enabled = true
         // renderer.shadowMap.type = PCFSoftShadowMap
-        renderer.setPixelRatio( window.devicePixelRatio );
-        updateRender();
-        container.value.appendChild(renderer.domElement)
+        renderer.setPixelRatio( window.devicePixelRatio )
+        updateRender()
+        container.appendChild(renderer.domElement)
     }
 }
 
@@ -129,7 +124,7 @@ function setOrbitControls() {
     else controls.maxDistance = 8
     controls.maxPolarAngle = Math.PI / 2
 
-    //controls.autoRotate = true
+    controls.autoRotate = true
 }
 
 //Add animations
@@ -185,17 +180,17 @@ function resetMat(child: Object3D) {
 
 init()
 
-//client side renderer
-watch(aspectRatio, () => {
-    updateCamera()
-    updateRender()
-})
-
 watch(highlighted, (newHighlighted: Object3D, oldHighlighted: Object3D) => {
     if (oldHighlighted) {
         oldHighlighted.children.forEach(resetMat)
     }
     newHighlighted.children.forEach(highlight)
+})
+
+//client side renderer
+watch(aspectRatio, () => {
+    updateCamera()
+    updateRender()
 })
 
 onMounted(() => {
