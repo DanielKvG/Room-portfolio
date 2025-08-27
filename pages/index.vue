@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row h-screen pointer-events-none">
+  <div class="flex flex-row h-screen">
     <div class="absolute top-0 left-0 p-8 text-primary-100 z-10">
         <h1 class="text-5xl">Dani&euml;l KvG</h1>
         <h2 class="text-2xl">Kooyman van Guldener</h2>
@@ -14,7 +14,7 @@
         <i class="ph ph-arrow-up text-5xl"></i>
         <p class="text-2xl">Click to get to know me!</p>
       </div>
-      <div class="absolute top-6 right-12 flex flex-col gap-4 items-end text-primary-100 pointer-events-auto">
+      <div class="absolute top-8 right-12 flex flex-col gap-4 items-end text-primary-100">
         <div 
           v-for="page in pages" 
           :key="page" @click="openPage(page)" 
@@ -30,10 +30,33 @@
 
     <div 
       class="flex flex-col w-[0px] bg-secondary-500 transition-all duration-500 ease-in-out" 
-      :class="{ 'w-[1040px]' : store.page.open }">
+      :class="{ 'w-[1400px]' : store.page.open }"
+      >
       <div
         class="flex flex-col h-full opacity-0 transition-all duration-50 ease-in delay-50 p-4" 
-        :class="{ 'opacity-100 delay-300 duration-500': store.page.open }">
+        :class="{ 'opacity-100 delay-300 duration-500': store.page.open }"
+        >
+        <UButton 
+          v-if="store.page.open"
+          class="absolute opacity-inherit top-8 right-8 text-secondary-600 bg-secondary-400 hover:bg-secondary-300 transition" 
+          size="xl" 
+          trailing-icon="i-heroicons-x-mark"
+          @click="store.closePage()"
+        >
+          <p class="m-0 text-secondary-600">close</p>
+        </UButton>
+        <UButton 
+          v-if="store.page.open && store.page.subject != 'projects'"
+          class="absolute opacity-inherit bottom-8 right-8"
+          color="primary"
+          variant="outline"
+          size="xl" 
+          trailing-icon="i-heroicons-chevron-right"
+          :label="nextpage"
+          @click="openPage(nextpage)"
+        >
+          
+        </UButton>
         <AboutMe/>
         <Passions/>
         <Education/>
@@ -47,6 +70,8 @@
 import { useStore } from '~/store/store';
 const store = useStore()
 const pages = ['about me', 'passions', 'education', 'skills', 'work experience', 'projects']
+const nextpage = computed(() => pages[pages.findIndex(isPage) + 1])
+const isPage = (element: string) => element == store.page.subject
 
 function openPage(name: any) {
   store.page.subject = name
