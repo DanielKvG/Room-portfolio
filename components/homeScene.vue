@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import { AmbientLight, PerspectiveCamera, Scene, WebGLRenderer, Clock, HemisphereLight, DirectionalLight, Object3D, Raycaster, Vector2, Mesh, MeshBasicMaterial, MeshPhongMaterial, Material, Color } from 'three';
-import { useElementSize, useWindowSize, type MaybeComputedElementRef } from '@vueuse/core';
+import { useElementSize, useWindowSize } from '@vueuse/core';
 import { useStore } from '~/store/store';
 import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/Addons.js';
 
@@ -19,13 +19,11 @@ let controls: OrbitControls
 let basicRoom: GLTF
 let camera: PerspectiveCamera
 let scene: Scene
-let container: HTMLCanvasElement | null
+let container: Ref<HTMLCanvasElement | null>
 let clock: Clock
 let camTarget: Object3D
 let moved: boolean
 let matBuffer: Array<Material> = []
-let width: Ref<number> = ref(0)
-let height: Ref<number> = ref(0)
 
 const raycaster = new Raycaster()
 const store = useStore()
@@ -50,7 +48,7 @@ function init() {
     scene = new Scene();
 
     //Initialize container & dragfield
-    container = null
+    container = ref(null)
 
     //Add camera
     camera = new PerspectiveCamera(70, aspectRatio.value, 0.1, 1000)
@@ -106,14 +104,14 @@ function updateCamera() {
 
 //Add Renderer
 function setRenderer() {
-    if (container) {
+    if (container.value) {
         renderer = new WebGLRenderer({ antialias: true })
         renderer.setClearColor( 0x000000, 0 )
         // renderer.shadowMap.enabled = true
         // renderer.shadowMap.type = PCFSoftShadowMap
         renderer.setPixelRatio( window.devicePixelRatio )
         updateRender()
-        container.appendChild(renderer.domElement)
+        container.value.appendChild(renderer.domElement)
     }
 }
 
@@ -121,12 +119,17 @@ function setRenderer() {
 function setOrbitControls() {
 
     const dragfield = document.getElementById('dragfield')
-    if (!dragfield) return
-    dragfield.addEventListener('mousemove', onHighlight)
-    dragfield.addEventListener('pointerup', onSelect)
-    dragfield.addEventListener('pointerdown', function() {
-        moved = false
-    })
+    if (!dragfield) {
+        console.log('dragfield not defined')
+        return
+    } 
+    else {
+        dragfield.addEventListener('mousemove', onHighlight)
+        dragfield.addEventListener('pointerup', onSelect)
+        dragfield.addEventListener('pointerdown', function() {
+            moved = false
+        })
+    }
 
     controls = new OrbitControls( camera, dragfield)
     controls.target.set(0, -1, 0)

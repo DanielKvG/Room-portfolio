@@ -9,8 +9,7 @@
 <script lang="ts" setup>
 import { useStore } from '~/store/store';
 const store = useStore()
+
+
 </script>
 
-<style>
-
-</style>

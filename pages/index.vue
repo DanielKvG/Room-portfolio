@@ -14,7 +14,7 @@
         <i class="ph ph-arrow-up text-5xl"></i>
         <p class="text-2xl">Click to get to know me!</p>
       </div>
-      <div class="absolute top-8 right-12 flex flex-col gap-4 items-end text-primary-100">
+      <div class="absolute top-8 right-12 flex flex-col gap-4 items-end text-primary-100 pointer-events-auto">
         <div 
           v-for="page in pages" 
           :key="page" @click="openPage(page)" 
@@ -29,11 +29,11 @@
     </div>
 
     <div 
-      class="flex flex-col w-[0px] bg-secondary-500 transition-all duration-500 ease-in-out" 
-      :class="{ 'w-[1400px]' : store.page.open }"
+      class="flex flex-col max-w-[0px] bg-secondary-500 transition-all duration-500 ease-in-out" 
+      :class="{ 'max-w-[800px]' : store.page.open }"
       >
       <div
-        class="flex flex-col h-full opacity-0 transition-all duration-50 ease-in delay-50 p-4" 
+        class="flex flex-col h-full opacity-0 transition-all duration-50 ease-in delay-50 py-4" 
         :class="{ 'opacity-100 delay-300 duration-500': store.page.open }"
         >
         <UButton 
@@ -47,7 +47,7 @@
         </UButton>
         <UButton 
           v-if="store.page.open && store.page.subject != 'projects'"
-          class="absolute opacity-inherit bottom-8 right-8"
+          class="absolute opacity-inherit bottom-8 right-8 transition"
           color="primary"
           variant="outline"
           size="xl" 
@@ -55,7 +55,6 @@
           :label="nextpage"
           @click="openPage(nextpage)"
         >
-          
         </UButton>
         <AboutMe/>
         <Passions/>
