@@ -1,8 +1,6 @@
 <template>
   <div>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+    <router-view/>
     <!-- Dialogs -->
     <projectsDialog />
     <menuDialog />

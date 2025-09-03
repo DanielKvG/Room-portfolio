@@ -27,6 +27,7 @@ let matBuffer: Array<Material> = []
 
 const raycaster = new Raycaster()
 const store = useStore()
+const loader = new GLTFLoader()
 const highlighted = computed(() => store.highlighted)
 const pages = ['bureau', 'statafel', 'piano']
 
@@ -81,14 +82,15 @@ function init() {
     //----- Add lights to the scene ------
     scene.add(ambientLight, hemiLight, dirLight)
 
-    const loader = new GLTFLoader()
     //----- Load the room ------
-    loader.load( 'models/basicRoom.glb', function ( gltf ) {
-        basicRoom = gltf
-        basicRoom.scene.position.set(0, -2, 0)
-        console.log(basicRoom.scene.children)
-        scene.add(basicRoom.scene)
-    })
+    loadRoom()
+}
+
+//load modal function
+async function loadRoom() {
+    [basicRoom] = await Promise.all([loader.loadAsync("/models/basicRoom.glb")])
+    basicRoom.scene.position.set(0, -2, 0)
+    scene.add(basicRoom.scene)
 }
 
 //Update functions

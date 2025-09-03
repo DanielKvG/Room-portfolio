@@ -1,11 +1,12 @@
 <template>
-  <div class="flex flex-row h-screen">
+  <div class="flex flex-col h-screen md:flex-row">
     <div class="absolute top-0 left-0 p-8 text-primary-100 z-10">
-        <h1 class="text-5xl">Dani&euml;l KvG</h1>
-        <h2 class="text-2xl">Kooyman van Guldener</h2>
-        <div class="mb-8 items-baseline pt-8 text-secondary-300">
-            <div class="flex flex-row items-baseline"><p>I’m an &nbsp; </p><h3 class="text-primary-300">Industrial design Engineer</h3><p>&nbsp; with</p></div>
-            <div class="flex flex-row items-baseline"><p>passion for &nbsp;</p><h3 class="text-primary-300">UX</h3><p>&nbsp; - digital and physical.</p></div>
+        <h1 class="md:text-5xl text-4xl">Dani&euml;l KvG</h1>
+        <h2 class="md:text-2xl text-xl">Kooyman van Guldener</h2>
+        <div class="mb-8 items-baseline pt-8 pr-4 text-secondary-300">
+            <div class="flex flex-wrap items-baseline lg:w-[300px]">
+              <p class="text-base">I’m an <strong class="text-primary-300">Industrial design Engineer</strong> with passion for <strong class="text-primary-300">UX</strong> - digital and physical.</p>
+            </div>
         </div>
     </div>
     <div class="relative w-full h-full bg-gradient-to-r from-primary-950 to-[#12072B]">
@@ -14,7 +15,7 @@
         <i class="ph ph-arrow-up text-5xl"></i>
         <p class="text-2xl">Click to get to know me!</p>
       </div>
-      <div class="absolute top-8 right-12 flex flex-col gap-4 items-end text-primary-100 pointer-events-auto">
+      <div class="absolute top-8 right-12 flex flex-col gap-4 items-end text-primary-100 pointer-events-auto hidden lg:inline">
         <div 
           v-for="page in pages" 
           :key="page" @click="openPage(page)" 
@@ -33,7 +34,7 @@
       :class="{ 'max-w-[800px]' : store.page.open }"
       >
       <div
-        class="flex flex-col h-full opacity-0 transition-all duration-50 ease-in delay-50 py-4" 
+        class="relative flex flex-col h-full opacity-0 transition-all duration-50 ease-in delay-50 py-4" 
         :class="{ 'opacity-100 delay-300 duration-500': store.page.open }"
         >
         <UButton 
@@ -59,6 +60,11 @@
         <AboutMe/>
         <Passions/>
         <Education/>
+        <div class="absolute bottom-0 top-0 left-12 flex flex-col justify-end mt-32">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 737" fill="none" class="w-4 h-0 transition-all duration-700 ease-in-out" :class="{'h-full duration-300' : store.page.subject == 'education'}">
+            <path d="M1 738V0" stroke="#EEF6FF" stroke-width="2"/>
+          </svg>
+        </div>
       </div>
     </div>
 
@@ -68,7 +74,7 @@
 <script lang="ts" setup>
 import { useStore } from '~/store/store';
 const store = useStore()
-const pages = ['about me', 'passions', 'education', 'skills', 'work experience', 'projects']
+const pages = ['about me', 'passions', 'education', 'work experience', 'board years', 'skills', 'projects']
 const nextpage = computed(() => pages[pages.findIndex(isPage) + 1])
 const isPage = (element: string) => element == store.page.subject
 
