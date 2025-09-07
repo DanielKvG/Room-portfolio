@@ -66,12 +66,12 @@
         >
         <UButton 
           v-if="store.page.open"
-          class="absolute opacity-inherit top-8 right-8 text-secondary-600 bg-secondary-400 hover:bg-secondary-300 transition" 
+          class="absolute opacity-inherit top-4 right-4 md:top-8 md:right-8 text-secondary-600 bg-secondary-400 hover:bg-secondary-300 transition" 
           size="xl" 
           trailing-icon="i-heroicons-x-mark"
           @click="store.closePage()"
         >
-          <p class="m-0 text-secondary-600">close</p>
+          <p class="m-0 text-secondary-600 hidden md:inline">close</p>
         </UButton>
         <UButton 
           v-if="store.page.open && store.page.subject != 'projects'"
@@ -95,7 +95,7 @@
         <AboutMe/>
         <Passions/>
         <Education/>
-        <div class="absolute bottom-0 top-0 left-12 flex flex-col justify-end mt-32">
+        <div class="absolute bottom-0 top-0 left-4 md:left-12 flex flex-col justify-end mt-16 md:mt-32">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 737" fill="none" class="w-4 h-0 transition-all duration-700 ease-in-out" :class="{'h-full duration-300' : store.page.subject == 'education'}">
             <path d="M1 738V0" stroke="#EEF6FF" stroke-width="2"/>
           </svg>
