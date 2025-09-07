@@ -75,15 +75,23 @@
         </UButton>
         <UButton 
           v-if="store.page.open && store.page.subject != 'projects'"
-          class="absolute opacity-inherit bottom-8 right-8 transition"
+          class="absolute opacity-inherit bottom-8 right-8 transition hidden md:inline"
           color="primary"
           variant="outline"
           size="xl" 
           trailing-icon="i-heroicons-chevron-right"
           :label="nextpage"
           @click="openPage(nextpage)"
-        >
-        </UButton>
+        />
+        <UButton 
+          v-if="store.page.open && store.page.subject != 'projects'"
+          class="absolute opacity-inherit bottom-8 left-8 transition md:hidden"
+          color="primary"
+          variant="outline"
+          size="xl" 
+          trailing-icon="i-heroicons-chevron-down"
+          @click="openPage(nextpage)"
+        ><p class="text-xl">{{ nextpage }}</p></UButton>
         <AboutMe/>
         <Passions/>
         <Education/>

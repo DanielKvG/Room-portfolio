@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col justify-end h-0 transition-all duration-500 ease-in-out overflow-hidden" :class="{'h-full' : store.page.subject == 'passions'}">
     <div class="flex flex-col h-screen my-24">
-      <div class="relative flex flex-row h-full items-center" @mouseenter="showDes = true" @mouseleave="showDes = false"> 
-        <div class="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center"> 
-          <h1 class="text-5xl pl-6 text-primary-900">Design</h1>
+      <div class="relative flex flex-row max-sm:justify-end h-full md:items-center" @mouseenter="showDes = true" @mouseleave="showDes = false"> 
+        <div class="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center bg-secondary-600 md:bg-secondary-500"> 
+          <h1 class="text-xl md:text-5xl pl-6 text-primary-900 [writing-mode:vertical-lr] md:[writing-mode:horizontal-tb]">Design</h1>
         </div>
-        <div class="embla overflow-hidden h-full max-w-0 transition-all duration-500 ease-in-out" :class="{'max-w-full' : showDes }" ref="desRef">
+        <div class="embla overflow-hidden h-full max-sm:w-3/4 md:max-w-0 transition-all duration-500 ease-in-out" :class="{'md:max-w-full' : showDes }" ref="desRef">
           <div class="embla__container flex flex-row h-full">
             <div v-for="(passion, index) in design" class="embla__slide min-w-[240px] h-full even:bg-primary-50 odd:bg-primary-100 flex flex-col py-2 items-center justify-end" :key="index">
               <img :src="passion.icon" />
@@ -15,11 +15,11 @@
         </div>
       </div>
 
-      <div class="relative flex flex-row h-full items-center" @mouseenter="showMat = true" @mouseleave="showMat = false"> 
-        <div class="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center"> 
-          <h1 class="text-5xl pl-6 text-primary-900">Materials</h1>
+      <div class="relative flex flex-row max-sm:justify-start h-full items-center" @mouseenter="showMat = true" @mouseleave="showMat = false"> 
+        <div class="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center max-sm:items-end pr-6 bg-secondary-600 md:bg-secondary-500"> 
+          <h1 class="text-xl md:text-5xl pl-6 text-primary-900 [writing-mode:vertical-lr] md:[writing-mode:horizontal-tb]">Materials</h1>
         </div>
-        <div class="embla overflow-hidden h-full max-w-0 transition-all duration-500 ease-in-out" :class="{'max-w-full' : showMat }" ref="matRef">
+        <div class="embla overflow-hidden h-full max-sm:w-3/4 md:max-w-0 transition-all duration-500 ease-in-out" :class="{'md:max-w-full' : showMat }" ref="matRef">
           <div class="embla__container flex flex-row h-full">
             <div v-for="(passion, index) in materials" class="embla__slide min-w-[240px] h-full even:bg-primary-50 odd:bg-primary-100 flex flex-col py-2 items-center justify-end" :key="index">
               <img :src="passion.icon" />
@@ -29,11 +29,11 @@
         </div>
       </div>
 
-      <div class="relative flex flex-row h-full items-center" @mouseenter="showSpo = true" @mouseleave="showSpo = false"> 
-        <div class="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center"> 
-          <h1 class="text-5xl pl-6 text-primary-900">Sports</h1>
+      <div class="relative flex flex-row max-sm:justify-end h-full md:items-center" @mouseenter="showSpo = true" @mouseleave="showSpo = false"> 
+        <div class="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center bg-secondary-600 md:bg-secondary-500"> 
+          <h1 class="text-xl md:text-5xl pl-6 text-primary-900 [writing-mode:vertical-lr] md:[writing-mode:horizontal-tb]">Sports</h1>
         </div>
-        <div class="embla overflow-hidden h-full max-w-0 transition-all duration-500 ease-in-out" :class="{'max-w-full' : showSpo }" ref="spoRef">
+        <div class="embla overflow-hidden h-full max-sm:w-3/4 md:max-w-0 transition-all duration-500 ease-in-out" :class="{'md:max-w-full' : showSpo }" ref="spoRef">
           <div class="embla__container flex flex-row h-full">
             <div v-for="(passion, index) in sports" class="embla__slide min-w-[240px] h-full even:bg-primary-50 odd:bg-primary-100 flex flex-col py-2 items-center justify-end" :key="index">
               <img :src="passion.icon" />
@@ -43,11 +43,11 @@
         </div>
       </div>
 
-      <div class="relative flex flex-row h-full items-center" @mouseenter="showSoc = true" @mouseleave="showSoc = false"> 
-        <div class="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center"> 
-          <h1 class="text-5xl pl-6 text-primary-900">Social</h1>
+      <div class="relative flex flex-row max-sm:justify-start h-full items-center" @mouseenter="showSoc = true" @mouseleave="showSoc = false"> 
+        <div class="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center  max-sm:items-end pr-6 bg-secondary-600 md:bg-secondary-500"> 
+          <h1 class="text-xl md:text-5xl pl-6 text-primary-900 [writing-mode:vertical-lr] md:[writing-mode:horizontal-tb]">Social</h1>
         </div>
-        <div class="embla overflow-hidden h-full max-w-0 transition-all duration-500 ease-in-out" :class="{'max-w-full' : showSoc }" ref="socRef">
+        <div class="embla overflow-hidden h-full max-sm:w-3/4 md:max-w-0 transition-all duration-500 ease-in-out" :class="{'md:max-w-full' : showSoc }" ref="socRef">
           <div class="embla__container flex flex-row h-full">
             <div v-for="(passion, index) in social" class="embla__slide min-w-[240px] h-full even:bg-primary-50 odd:bg-primary-100 flex flex-col py-2 items-center justify-end" :key="index">
               <img :src="passion.icon" />

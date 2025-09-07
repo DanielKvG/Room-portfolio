@@ -19,11 +19,11 @@
           Material selection
           and 3D moddeling
         </p-large>
-        <p-large>
+        <p-large class="hidden md:inline">
           But there are way more passions for me!
         </p-large>
       </div>
-      <div class="flex h-96 mt-24"> 
+      <div class="flex h-96 mt-24 absolute md:static bottom-[-250px] right-[-50px] transition duration-500 ease-in-out" :class="{'bottom-[1500px] right-[800px]': store.page.subject != 'about me'}"> 
         <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute">
           <defs>
             <clipPath id="mask">
