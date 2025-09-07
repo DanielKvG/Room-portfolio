@@ -1,8 +1,8 @@
 <template>
     <div id="dragfield" class="absolute left-0 right-0 top-0 bottom-0 flex flex-col justify-center pointer-events-auto">
         <div 
-            class="h-96 transition-all duration-800 ease-in-out" 
-            :class="{'h-full': !store.page.open}" 
+            class="h-96 w-3/4 transition-all duration-800 ease-in-out" 
+            :class="{'h-full w-full': !store.page.open}" 
             ref="container">
         </div>
     </div>
