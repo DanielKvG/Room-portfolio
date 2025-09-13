@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed size-full">
+  <div class="fixed h-dvh w-full overflow-hidden">
     <router-view/>
     <!-- Dialogs -->
     <projectsDialog />
