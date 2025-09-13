@@ -1,1 +1,0 @@
-import{f as r,g as s,c as u,a as t,h as a,F as c,o as l}from"./DFef5lR_.js";const k=r({__name:"projects",setup(p){const o=s();return(m,e)=>(l(),u(c,null,[e[1]||(e[1]=t("h1",null,"Welcome to my project page!",-1)),t("button",{onClick:e[0]||(e[0]=(...n)=>a(o).back&&a(o).back(...n))},"Go back")],64))}});export{k as default};

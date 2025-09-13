@@ -1,0 +1,1 @@
+import{f as t,c as e,o as s}from"./C43kLK-X.js";const o={class:"absolute flex flex-row top-0 left-0 right-0 bottom-0 items-start justify-center p-4 lg:items-end lg:justify-start lg:w-80"},l=t({__name:"index",setup(n){return(r,a)=>(s(),e("div",o))}});export{l as default};
