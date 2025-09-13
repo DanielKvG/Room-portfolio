@@ -8,7 +8,6 @@
         <h2>University of Twente</h2>
         <h2>Lidl</h2>
         <h2>Gasterij Terborgh</h2>
-        <p>more coming soon</p>
       </div>
     </div>
   </div>
