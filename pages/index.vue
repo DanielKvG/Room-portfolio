@@ -95,6 +95,7 @@
         <AboutMe/>
         <Passions/>
         <Education/>
+        <Work/>
         <div class="absolute bottom-0 top-0 left-4 md:left-12 flex flex-col justify-end mt-16 md:mt-32">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 737" fill="none" class="w-4 h-0 transition-all duration-700 ease-in-out" :class="{'h-full duration-300' : store.page.subject == 'education'}">
             <path d="M1 738V0" stroke="#EEF6FF" stroke-width="2"/>
