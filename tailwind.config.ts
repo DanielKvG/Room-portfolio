@@ -1,9 +1,7 @@
 import colors from 'tailwindcss/colors'
 import type { Config } from 'tailwindcss'
 
-//export default <Partial<Config>>{
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
     "./components/**/*.{js,vue,ts}",
     "./layouts/**/*.vue",
@@ -28,7 +26,20 @@ module.exports = {
             900: '#183590',
             950: '#132258',  
         },
+        secondary: {
+            50: '#EEFFF6',
+            100: '#D8FFEE',
+            200: '#B3FFDE',
+            300: '#78FDC4',
+            400: '#2BF19D',
+            500: '#0CDB84',
+            600: '#03B66B',
+            700: '#078E55',
+            800: '#0B7046',
+            900: '#0C5B3C',
+            950: '#003320',  
+        }
       },
     },
   }
-}
+} satisfies Config

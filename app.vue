@@ -1,8 +1,6 @@
 <template>
   <div>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+    <router-view/>
     <!-- Dialogs -->
     <projectsDialog />
     <menuDialog />
@@ -13,9 +11,14 @@
 useHead({
   title: 'DanielKvG',
   meta: [{ name: 'description', content: 'Portfolio website van Daniël' }],
-  link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+  link: [
+    { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    { rel: 'stylesheet', type: 'text/css', href:"https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"},
+    { rel: 'stylesheet', type: 'text/css', href:"https://fonts.googleapis.com/css?family=Open Sans"}
+  ],
   htmlAttrs: { lang: 'nl' },
 })
+
 </script>
 
 
@@ -46,7 +49,7 @@ h2 {
 }
 
 h3 {
-  font-family: Arial ,sans-serif; 
+  font-family: Open Sans ,sans-serif; 
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
@@ -55,11 +58,23 @@ h3 {
 }
 
 p {
-  font-family: Arial ,sans-serif; 
+  font-family: Open Sans ,sans-serif; 
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px; /* 125% */
+  letter-spacing: 0.5px;
+  margin: 0;
+  margin-bottom: 8px;
+  white-space: normal;
+}
+
+p-large {
+  font-family: Open Sans ,sans-serif; 
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 125%;
   letter-spacing: 0.5px;
   margin: 0;
   margin-bottom: 8px;

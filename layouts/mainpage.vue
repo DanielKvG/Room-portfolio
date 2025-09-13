@@ -8,8 +8,12 @@
             </div> -->
             <slot></slot> <!-- route -->
         </div>
-        <ClientOnly class="threeJS">
+        <!-- Rendered 3D model -->
+        <!-- <ClientOnly class="threeJS">
             <ThreeScene ref="threeScene"/>
+        </ClientOnly> -->
+        <ClientOnly class="z-12 enable-pointer-events">
+            <homeScene ref="homeScene"/>
         </ClientOnly>
         <div class="achtergrond">
             <div id="intro-column"></div>
@@ -80,6 +84,7 @@
 <script setup lang="ts">
 
 let threeScene: Ref = ref(null)
+import { ClientOnly } from '#components';
 import { pageOrder } from '~/components/pageOrder';
 import { useStore } from '~/store/store';
 
@@ -137,11 +142,6 @@ function previousPage() {
 </script>
 
 <style lang="scss">
-// .threeJS {
-//     //pointer-events: none;
-    
-// }
-
 .html-pagina {
     position: absolute;
     display: flex;
