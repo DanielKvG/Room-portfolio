@@ -36,7 +36,7 @@
       </div>
     </div>
     <div 
-      class="absolute top-0 left-0 right-0 bottom-0 flex justify-end opacity-0 transition-all duration-500 z-20 pointer-events-none" 
+      class="absolute top-0 left-0 right-0 bottom-0 flex justify-end opacity-0 transition-all duration-500 z-20 pointer-events-none overflow-hidden" 
       :class="{'opacity-100 pointer-events-auto' : menuOpen}"
     >
       <div class="grow bg-primary-950 opacity-80" @click="menuOpen = false"></div>

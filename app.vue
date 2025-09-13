@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="overflow-hidden w-full h-full">
     <router-view/>
     <!-- Dialogs -->
     <projectsDialog />
@@ -25,7 +25,7 @@ useHead({
 <style>
 body {
   margin: 0;
-  overflow: hidden;
+
 }
 
 h1 {
