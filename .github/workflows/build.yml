@@ -15,10 +15,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install all dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Build
-        run: pnpm run generate # The build command of your project
+        run: npm run generate # The build command of your project
 
       - name: Push
         uses: s0/git-publish-subdir-action@develop
