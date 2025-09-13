@@ -1,0 +1,1 @@
+import{_ as o,c as s,a as t,o as a}from"./Dpoprmzj.js";const n={},c={class:"laptop"};function r(l,e){return a(),s("div",c,e[0]||(e[0]=[t("p",null,"Hallo Ik ben daniel",-1)]))}const p=o(n,[["render",r]]);export{p as default};
