@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-screen md:flex-row">
+  <div class="flex flex-col h-full md:flex-row">
     <div class="absolute top-0 left-0 p-8 text-primary-100 z-10" :class="{'hidden md:inline' : store.page.open}">
         <h1 class="md:text-5xl text-4xl">Dani&euml;l KvG</h1>
         <h2 class="md:text-2xl text-xl">Kooyman van Guldener</h2>
