@@ -9,9 +9,9 @@
             </div>
         </div>
     </div>
-    <div class="relative h-full w-full bg-gradient-to-r from-primary-950 to-[#12072B]">
+    <div class="relative h-full w-full bg-gradient-to-r from-primary-950 to-primary-950">
       <homeScene ref="homeScene"/>
-      <div class="absolute bottom-0 left-0 right-0 flex flex-col text-secondary-300 pb-4 gap-4 items-center" :class="{'hidden md:inline' : store.page.open}">
+      <div ref="swipe" class="absolute bottom-0 left-0 right-0 flex flex-col text-secondary-300 pb-4 gap-4 items-center" :class="{'hidden md:inline' : store.page.open}">
         <i class="ph ph-arrow-up text-5xl"></i>
         <p class="text-2xl">Click to get to know me!</p>
       </div>
@@ -55,6 +55,7 @@
         </div>
       </div>
     </div>
+    <AboutMeMobile class="absolute w-full max-h-4/5 bottom-0 z-10" :class="{ animated: !isSwiping }" :style="aboutStyle"/>
 
     <div 
       class="flex flex-col shrink-0 h-[0px] md:max-w-[0px] md:h-full bg-secondary-500 transition-all duration-500 ease-in-out" 
@@ -67,7 +68,7 @@
         <UButton 
           v-if="store.page.open"
           class="absolute opacity-inherit top-4 right-4 md:top-8 md:right-8 text-secondary-600 bg-secondary-400 hover:bg-secondary-300 transition" 
-          size="xl" 
+          size="lg" 
           trailing-icon="i-heroicons-x-mark"
           @click="store.closePage()"
         >
@@ -85,17 +86,17 @@
         />
         <UButton 
           v-if="store.page.open && store.page.subject != 'projects'"
-          class="absolute opacity-inherit bottom-8 left-8 transition md:hidden"
+          class="absolute opacity-inherit bottom-6 left-4 transition md:hidden"
           color="primary"
           variant="outline"
-          size="xl" 
+          size="md" 
           trailing-icon="i-heroicons-chevron-down"
           @click="openPage(nextpage)"
         ><p class="text-xl">{{ nextpage }}</p></UButton>
-        <AboutMe/>
+        <!-- <AboutMe/>
         <Passions/>
         <Education/>
-        <Work/>
+        <Work/> -->
         <div class="absolute bottom-0 top-0 left-4 md:left-12 flex flex-col justify-end mt-16 md:mt-32">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 737" fill="none" class="w-4 h-0 transition-all duration-700 ease-in-out" :class="{'h-full duration-300' : store.page.subject == 'education'}">
             <path d="M1 738V0" stroke="#EEF6FF" stroke-width="2"/>
@@ -108,17 +109,45 @@
 </template>
 
 <script lang="ts" setup>
+import { useSwipe } from '@vueuse/core';
 import { useStore } from '~/store/store';
+
 const store = useStore()
 const pages = ['about me', 'passions', 'education', 'work experience', 'board years', 'skills', 'projects']
 const nextpage = computed(() => pages[pages.findIndex(isPage) + 1])
 const isPage = (element: string) => element == store.page.subject
 const menuOpen = ref(false)
+const aboutHeight = ref(0)
 
 function openPage(name: any) {
   store.page.subject = name
   store.page.open = true
 }
+
+const swipe = useTemplateRef("swipe")
+const { isSwiping, direction, lengthX, lengthY } = useSwipe(
+  swipe,
+  {
+    passive: false,
+    onSwipe(e: TouchEvent) {
+      if (lengthY.value > 0) {
+        aboutHeight.value = lengthY.value / 4
+      }
+    },
+    onSwipeEnd(e: TouchEvent) {
+      if (lengthY.value > 100) {
+        aboutHeight.value = 80
+      }
+      else {
+        aboutHeight.value = 0
+      }
+    },
+  },
+)
+
+const aboutStyle = computed(() => {
+  return {height: `${aboutHeight.value}%`}
+})
 
 </script>
 

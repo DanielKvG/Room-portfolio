@@ -1,27 +1,27 @@
 <template>
   <div class="flex flex-col justify-end h-0 transition-all duration-500 ease-in-out overflow-hidden" :class="{'h-full' : store.page.subject == 'about me'}">
-    <div class="flex flex-row gap-2 h-screen px-4 py-8">
+    <div class="flex flex-row gap-2 h-screen px-4">
       <div class="flex flex-col gap-4"> 
         <h1>Hi!</h1>
-        <p-large>
+        <p class="md:text-xl">
           <span>I’m an Industrial Design Engineer Master student at the University of Twente. </span>
           <span class="text-primary-900 font-medium">Combining passion and knowledge</span> is my core principle with everything I do. 
           It is as well a never ending circle. 
           My passions feed the need for knowledge and knowledge provides for new passions.
-        </p-large>
-        <p-large>
+        </p>
+        <p class="md:text-xl">
           I’m always exploring new things; 
           I’ve tried almost all sports and my study has introduced me to many different topics within technical engineering.
-        </p-large>
-        <p-large>
+        </p>
+        <p class="md:text-xl">
           Subjects I like to work most with are 
           User Interface design, 
           Material selection
           and 3D moddeling
-        </p-large>
-        <p-large class="hidden md:inline">
+        </p>
+        <p class="hidden md:inline md:text-xl">
           But there are way more passions for me!
-        </p-large>
+        </p>
       </div>
       <div class="flex h-96 mt-24 absolute md:static bottom-[-250px] right-[-50px] transition duration-500 ease-in-out" :class="{'bottom-[1500px] right-[800px]': store.page.subject != 'about me'}"> 
         <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute">
