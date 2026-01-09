@@ -1,8 +1,10 @@
 <template>
   <div class="flex flex-col h-full md:flex-row">
-    <div class="absolute top-0 left-0 p-8 text-primary-100 z-10" :class="{'hidden md:inline' : store.page.open}">
+    <div class="absolute top-0 left-0 p-8 text-primary-100 z-20" :class="{'hidden md:inline' : store.page.open}">
         <h1 class="md:text-5xl text-4xl">Dani&euml;l KvG</h1>
         <h2 class="md:text-2xl text-xl">Kooyman van Guldener</h2>
+    </div>
+    <div class="absolute top-14 left-0 p-8 z-10">
         <div class="mb-8 items-baseline pt-8 pr-4 text-secondary-300">
             <div class="flex flex-wrap items-baseline lg:w-[300px]">
               <p class="text-base">I'm an <strong class="text-primary-300">Industrial design Engineer</strong> with passion for <strong class="text-primary-300">UX</strong> - digital and physical.</p>
@@ -55,7 +57,7 @@
         </div>
       </div>
     </div>
-    <AboutMeMobile class="absolute w-full max-h-4/5 bottom-0 z-10" :class="{ animated: !isSwiping }" :style="aboutStyle"/>
+    <AboutMeMobile class="absolute w-full max-h-4/5 bottom-0 z-10 overflow-y-visible" :class="{ animated: !isSwiping }" :style="aboutStyle"/>
 
     <div 
       class="flex flex-col shrink-0 h-[0px] md:max-w-[0px] md:h-full bg-secondary-500 transition-all duration-500 ease-in-out" 
@@ -136,7 +138,7 @@ const { isSwiping, direction, lengthX, lengthY } = useSwipe(
     },
     onSwipeEnd(e: TouchEvent) {
       if (lengthY.value > 100) {
-        aboutHeight.value = 80
+        aboutHeight.value = 100
       }
       else {
         aboutHeight.value = 0
