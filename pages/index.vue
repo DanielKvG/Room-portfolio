@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full md:flex-row">
-    <div class="absolute top-0 left-0 p-8 text-primary-100 z-20" :class="{'hidden md:inline' : store.page.open}">
+    <div class="absolute top-0 left-0 p-8 text-primary-100 z-20" :class="{'hidden md:inline' : store.page.open}" @click="closeSwipe">
         <h1 class="md:text-5xl text-4xl">Dani&euml;l KvG</h1>
         <h2 class="md:text-2xl text-xl">Kooyman van Guldener</h2>
     </div>
@@ -11,13 +11,15 @@
             </div>
         </div>
     </div>
-    <div class="relative h-full w-full bg-gradient-to-r from-primary-950 to-primary-950">
+    <div class="absolute z-20 top-1/4 left-0 right-0 bottom-1/4" :class="aboutHeight > 80 ? 'bottom-72 top-32' : ''">
       <homeScene ref="homeScene"/>
+    </div>
+    <div class="relative h-full w-full bg-gradient-to-b from-primary-950 to-main">
       <div ref="swipe" class="absolute bottom-0 left-0 right-0 flex flex-col text-secondary-300 pb-4 gap-4 items-center" :class="{'hidden md:inline' : store.page.open}">
         <i class="ph ph-arrow-up text-5xl"></i>
-        <p class="text-2xl">Click to get to know me!</p>
+        <p class="text-2xl">Swipe up for my projects!</p>
       </div>
-      <div class="absolute top-8 right-12 flex flex-col gap-4 items-end text-primary-100 pointer-events-auto z-20">
+      <!-- <div class="absolute top-8 right-12 flex flex-col gap-4 items-end text-primary-100 pointer-events-auto z-20">
         <div class="mt-4 md:hidden" @click="menuOpen = true"> 
           <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 2H40" stroke="#EEF6FF" stroke-width="4"/>
@@ -35,13 +37,13 @@
             :key="store.page.subject">{{ page }}
           </h2>
         </div>
-      </div>
+      </div> -->
     </div>
     <div 
       class="absolute top-0 left-0 right-0 bottom-0 flex justify-end opacity-0 transition-all duration-500 z-20 pointer-events-none overflow-hidden" 
       :class="{'opacity-100 pointer-events-auto' : menuOpen}"
     >
-      <div class="grow bg-primary-950 opacity-80" @click="menuOpen = false"></div>
+      <div class="grow bg-main opacity-80" @click="menuOpen = false"></div>
       <div class="flex flex-col justify-center shrink-0 w-0 h-full bg-black transition-all duration-500 ease-in-out gap-4 p-4" :class="{'w-4/5' : menuOpen}"> 
         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none" class="absolute top-12 right-12" @click="menuOpen = false">
           <path d="M2 2L28 28" stroke="#EEF6FF" stroke-width="4"/>
@@ -57,7 +59,8 @@
         </div>
       </div>
     </div>
-    <AboutMeMobile class="absolute w-full max-h-4/5 bottom-0 z-10 overflow-y-visible" :class="{ animated: !isSwiping }" :style="aboutStyle"/>
+    <!-- <AboutMeMobile class="absolute w-full max-h-4/5 bottom-0 z-10 overflow-y-visible" :class="{ animated: !isSwiping }" :style="aboutStyle"/> -->
+    <Projects class="absolute w-full max-h-4/5 bottom-0 z-10 overflow-y-visible" :class="{ animated: !isSwiping }" :style="aboutStyle"/>
 
     <div 
       class="flex flex-col shrink-0 h-[0px] md:max-w-[0px] md:h-full bg-secondary-500 transition-all duration-500 ease-in-out" 
@@ -124,6 +127,10 @@ const aboutHeight = ref(0)
 function openPage(name: any) {
   store.page.subject = name
   store.page.open = true
+}
+
+function closeSwipe() {
+  aboutHeight.value = 0
 }
 
 const swipe = useTemplateRef("swipe")

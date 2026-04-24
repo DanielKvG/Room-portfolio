@@ -54,7 +54,7 @@ function init() {
     //Add camera
     camera = new PerspectiveCamera(70, aspectRatio.value, 0.1, 1000)
     if (!mobile.value) camera.position.set(-3.6, 2, -12)
-    else camera.position.set(3.6, 6, -12)
+    else camera.position.set(0, 4, -5)
     scene.add(camera)
 
     //----- AmbientLight for lighting up all faces (switch or light/dark mode)

@@ -45,5 +45,5 @@ export default defineNuxtConfig({
   routeRules: {
     //'/': { redirect: '/home' },
   },
-  compatibilityDate: '2024-12-11',
+  compatibilityDate: '2026-04-06',
 })

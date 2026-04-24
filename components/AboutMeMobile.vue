@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col bg-gradient-to-b from-primary-950 to-secondary-500 from-[20%] to-[37%]">
+  <div class="flex flex-col bg-gradient-to-b from-sub to-sub from-[20%] to-[36%]">
     <div class="fixed t-0 h-[20%] w-full bg-primary-950"></div>
     <div class="flex flex-col h-[100%] shrink-0 overflow-scroll">
       <div class="flex h-[20%] shrink-0"></div>
@@ -23,9 +23,9 @@
       </div>
 
       <!-- <div class="sticky top-0 h-[10%] shrink-0 bg-primary-950"></div> -->
-      <div class="sticky z-0 top-[20%] h-0 shrink-0 bg-secondary-500 shadow-[0_0_40px_17px_rgba(12,219,132,0.50)]"></div>
+      <!-- <div class="sticky z-0 top-[20%] h-0 shrink-0 bg-sub shadow-[0_0_40px_17px_rgba(12,219,132,0.50)]"></div> -->
 
-      <div class="flex flex-col h-[80%] px-8 shrink-0 bg-secondary-500"> 
+      <div class="flex flex-col h-[80%] px-8 shrink-0 bg-sub"> 
         <div class="flex-col px-4 pt-12">
           <p class="text-xl font-medium text-secondary-950">To be precise, I’ve protanomaly, my red cones work less good.</p>
           <p class="text-xl font-medium text-secondary-950">Colours where red makes the difference are hard for me. For example, the tree below is not strange for me. Is it strange for you?</p>
