@@ -13,17 +13,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useProjectStore } from '~/store/projectStore';
-
-const projectStore = useProjectStore()
-
 var itemText: Array<string> = [
   'Made as a navigation tool for my website, now it is a seperate project and acts as a symbol for the first building brick starting this website.',
   'It thought me as well an important lesson, not all ideas which are beautiful are useful. I am not saying that it should not be tried, but test before too much time goes into it'
 ]
 
 var itemTopics: Array<string> = [
-  'Blender', 'ThreeJS'
+  'Blender'
 ]
 </script>
 

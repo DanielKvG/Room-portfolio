@@ -14,7 +14,8 @@ import { useElementSize, useWindowSize } from '@vueuse/core';
 import { useStore } from '~/store/store';
 import { useProjectStore} from '~/store/projectStore';
 import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/Addons.js';
-//import { gsap } from 'gsap';
+import { gsap } from 'gsap';
+import { Draggable } from 'gsap/Draggable';
 
 let renderer: WebGLRenderer
 let controls: OrbitControls
@@ -24,12 +25,19 @@ let scene: Scene
 let container: Ref<HTMLCanvasElement | null>
 let clock: Clock
 let camTarget: Object3D
-let moved: boolean
+let down: boolean
 let matBuffer: Array<Material> = []
+let dragger: Draggable
 type projectVis = {
     gltf: GLTF | undefined
     url: string
 }
+
+var scale = 0.00005;
+var lastX = 0;
+var lastY = 0;
+var meshX = 0;
+var meshY = 0;
 
 const raycaster = new Raycaster()
 const store = useStore()
@@ -113,11 +121,17 @@ async function loadNext(model: projectVis) {
 }
 
 function nextModel() {
-    if (nextProject.value) {
-        
-        nextProject.value.gltf!.scene.position.set(15, -2, 0)
-        currentProject.value.gltf!.scene.position.set(0, -2, 0)
+    if (nextProject.value.gltf && currentProject.value.gltf) {
+        gsap.to(nextProject.value.gltf.scene.position, {x: 15, y: -2, z: 0, onComplete: removeModel, onCompleteParams: [nextProject.value.gltf.scene], duration: 2, ease: "power2.inOut"})
+        gsap.to(currentProject.value.gltf.scene.position, {x: 0, y: -2, z: 0, duration: 2, ease: "power2.inOut"})
+        // nextProject.value.gltf!.scene.position.set(15, -2, 0)
+        // currentProject.value.gltf!.scene.position.set(0, -2, 0)
     }
+}
+
+function removeModel(model: Object3D) {
+    scene.remove(model)
+    loadNext(nextProject.value)
 }
 
 //Update functions
@@ -145,32 +159,80 @@ function setRenderer() {
 }
 
 //Add orbit controls
-// function setOrbitControls() {
+function setOrbitControls() {
 
-//     const dragfield = document.getElementById('dragfield')
-//     if (!dragfield) {
-//         console.log('dragfield not defined')
-//         return
-//     } 
-//     else {
-//         dragfield.addEventListener('mousemove', onHighlight)
-//         dragfield.addEventListener('pointerup', onSelect)
-//         dragfield.addEventListener('pointerdown', function() {
-//             moved = false
-//         })
-//     }
+    const dragfield = document.getElementById('dragfield')
+    if (!dragfield) {
+        console.log('dragfield not defined')
+        return
+    } 
+    else {
+        // dragfield.addEventListener('mousemove', onHighlight)
+        // dragfield.addEventListener('pointerup', onSelect)
+        dragfield.addEventListener('pointerdown', function() {
+            down = true
+        })
+        dragfield.addEventListener('pointermove', function(e) {
+            if (currentProject.value.gltf && down) {
+                var lastX = currentProject.value.gltf.scene.position.x;
+                var lastY = currentProject.value.gltf.scene.position.y;
 
-//     controls = new OrbitControls( camera, dragfield)
-//     controls.target.set(0, -1, 0)
-//     controls.enablePan = false
-//     controls.enableDamping = true
-//     controls.zoomSpeed = 4
-//     if (mobile.value) controls.maxDistance = 15
-//     else controls.maxDistance = 8
-//     controls.maxPolarAngle = Math.PI / 2
+                var dx = e.offsetX - lastX;
+                var dy = e.offsetY - lastY;
 
-//     controls.autoRotate = true
-// }
+                lastX = currentProject.value.gltf.scene.position.x;
+                lastY = currentProject.value.gltf.scene.position.y;
+
+                meshX += dx;
+                meshY += dy;
+                
+                currentProject.value.gltf.scene.rotation.x = meshY * scale;
+                currentProject.value.gltf.scene.rotation.y = meshX * scale;
+            }
+        })
+        dragfield.addEventListener('pointerup', function() {
+            down = false
+        })
+
+        // dragger = new Draggable(document.getElementById('dragfield'), {
+        //     onDrag: dragAction,
+        //     onThrowUpdate: dragAction,
+        //     trigger: renderer.domElement,
+        //     throwProps: true,
+        //     throwResistance: 10000
+        // })
+    }
+
+    // controls = new OrbitControls( camera, dragfield)
+    // controls.target.set(0, -1, 0)
+    // controls.enablePan = false
+    // controls.enableDamping = true
+    // controls.zoomSpeed = 4
+    // if (mobile.value) controls.maxDistance = 15
+    // else controls.maxDistance = 8
+    // controls.maxPolarAngle = Math.PI / 2
+
+    // controls.autoRotate = true
+}
+
+function dragAction() {
+    if (currentProject.value.gltf) {
+        var x = currentProject.value.gltf.scene.position.x;
+        var y = currentProject.value.gltf.scene.position.y;
+
+        var dx = x - lastX;
+        var dy = y - lastY;
+
+        lastX = x;
+        lastY = y;
+
+        meshX += dx;
+        meshY += dy;
+        
+        currentProject.value.gltf.scene.rotation.x = meshY * scale;
+        currentProject.value.gltf.scene.rotation.y = meshX * scale;
+    }
+}
 
 //Add animations
 function animate() {
@@ -188,13 +250,14 @@ function checkIntersection(event: MouseEvent): Object3D | undefined {
     const intersections = raycaster.intersectObject(currentProject.value.gltf!.scene, true)
 
     if (intersections.length > 0) {
+        console.log(intersections[0])
         return intersections[0].object.parent!
     }
 }
 
 //Object hover function
 function onHighlight(event: MouseEvent) {
-    moved = true
+    down = true
     const object = checkIntersection(event)
     if (object === store.highlighted) return
     else if (object && pages.includes(object.name)) store.highlighted = object
@@ -203,7 +266,7 @@ function onHighlight(event: MouseEvent) {
 
 //Object click function
 function onSelect(event: MouseEvent) {
-    if (moved === false) {
+    if (down === false) {
         const object = checkIntersection(event)
         if (object && pages.includes(object.name)) {
             store.setSelected(object)
@@ -248,7 +311,7 @@ watch(currentProject, () => {
 
 onMounted(() => {
     setRenderer()
-    //setOrbitControls()
+    setOrbitControls()
     renderer.setAnimationLoop(animate)
 })
 
