@@ -12,7 +12,9 @@
 import { AmbientLight, PerspectiveCamera, Scene, WebGLRenderer, Clock, HemisphereLight, DirectionalLight, Object3D, Raycaster, Vector2, Mesh, MeshBasicMaterial, MeshPhongMaterial, Material, Color } from 'three';
 import { useElementSize, useWindowSize } from '@vueuse/core';
 import { useStore } from '~/store/store';
+import { useProjectStore} from '~/store/projectStore';
 import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/Addons.js';
+//import { gsap } from 'gsap';
 
 let renderer: WebGLRenderer
 let controls: OrbitControls
@@ -24,9 +26,14 @@ let clock: Clock
 let camTarget: Object3D
 let moved: boolean
 let matBuffer: Array<Material> = []
+type projectVis = {
+    gltf: GLTF | undefined
+    url: string
+}
 
 const raycaster = new Raycaster()
 const store = useStore()
+const projectsStore = useProjectStore()
 const loader = new GLTFLoader()
 const highlighted = computed(() => store.highlighted)
 const pages = ['bureau', 'statafel', 'piano']
@@ -36,6 +43,8 @@ const size = reactive(useElementSize(el, {width: 0, height: 0}))
 
 const aspectRatio = computed(() => size.width / size.height)
 const mobile = computed(() => useWindowSize().width.value < 1024)
+const currentProject = computed(() => projectsStore.getProject())
+const nextProject = computed(() => projectsStore.getNextProject())
 
 //Setup function
 function init() {
@@ -54,7 +63,8 @@ function init() {
     //Add camera
     camera = new PerspectiveCamera(70, aspectRatio.value, 0.1, 1000)
     if (!mobile.value) camera.position.set(-3.6, 2, -12)
-    else camera.position.set(0, 4, -5)
+    else camera.position.set(0, 3, -7)
+    camera.lookAt(0, -1, 0)
     scene.add(camera)
 
     //----- AmbientLight for lighting up all faces (switch or light/dark mode)
@@ -83,14 +93,31 @@ function init() {
     scene.add(ambientLight, hemiLight, dirLight)
 
     //----- Load the room ------
-    loadRoom()
+    loadFirst(currentProject.value)
+
+    //----- Load next item -----
+    loadNext(nextProject.value)
 }
 
 //load modal function
-async function loadRoom() {
-    [basicRoom] = await Promise.all([loader.loadAsync("/models/basicRoom.glb")])
-    basicRoom.scene.position.set(0, -2, 0)
-    scene.add(basicRoom.scene)
+async function loadFirst(model: projectVis) {
+    [model.gltf] = await Promise.all([loader.loadAsync(model.url)])
+    model.gltf.scene.position.set(0, -2, 0)
+    scene.add(model.gltf.scene)
+}
+
+async function loadNext(model: projectVis) {
+    [model.gltf] = await Promise.all([loader.loadAsync(model.url)])
+    model.gltf.scene.position.set(-15, -2, 0)
+    scene.add(model.gltf.scene)
+}
+
+function nextModel() {
+    if (nextProject.value) {
+        
+        nextProject.value.gltf!.scene.position.set(15, -2, 0)
+        currentProject.value.gltf!.scene.position.set(0, -2, 0)
+    }
 }
 
 //Update functions
@@ -118,36 +145,36 @@ function setRenderer() {
 }
 
 //Add orbit controls
-function setOrbitControls() {
+// function setOrbitControls() {
 
-    const dragfield = document.getElementById('dragfield')
-    if (!dragfield) {
-        console.log('dragfield not defined')
-        return
-    } 
-    else {
-        dragfield.addEventListener('mousemove', onHighlight)
-        dragfield.addEventListener('pointerup', onSelect)
-        dragfield.addEventListener('pointerdown', function() {
-            moved = false
-        })
-    }
+//     const dragfield = document.getElementById('dragfield')
+//     if (!dragfield) {
+//         console.log('dragfield not defined')
+//         return
+//     } 
+//     else {
+//         dragfield.addEventListener('mousemove', onHighlight)
+//         dragfield.addEventListener('pointerup', onSelect)
+//         dragfield.addEventListener('pointerdown', function() {
+//             moved = false
+//         })
+//     }
 
-    controls = new OrbitControls( camera, dragfield)
-    controls.target.set(0, -1, 0)
-    controls.enablePan = false
-    controls.enableDamping = true
-    controls.zoomSpeed = 4
-    if (mobile.value) controls.maxDistance = 15
-    else controls.maxDistance = 8
-    controls.maxPolarAngle = Math.PI / 2
+//     controls = new OrbitControls( camera, dragfield)
+//     controls.target.set(0, -1, 0)
+//     controls.enablePan = false
+//     controls.enableDamping = true
+//     controls.zoomSpeed = 4
+//     if (mobile.value) controls.maxDistance = 15
+//     else controls.maxDistance = 8
+//     controls.maxPolarAngle = Math.PI / 2
 
-    controls.autoRotate = true
-}
+//     controls.autoRotate = true
+// }
 
 //Add animations
 function animate() {
-    controls.update()
+    //controls.update()
     renderer.render(scene, camera)
 }
 
@@ -158,7 +185,7 @@ function checkIntersection(event: MouseEvent): Object3D | undefined {
     )
 
     raycaster.setFromCamera(coords, camera)
-    const intersections = raycaster.intersectObject(basicRoom.scene, true)
+    const intersections = raycaster.intersectObject(currentProject.value.gltf!.scene, true)
 
     if (intersections.length > 0) {
         return intersections[0].object.parent!
@@ -215,9 +242,13 @@ watch(aspectRatio, () => {
     updateRender()
 })
 
+watch(currentProject, () => {
+    nextModel()
+})
+
 onMounted(() => {
     setRenderer()
-    setOrbitControls()
+    //setOrbitControls()
     renderer.setAnimationLoop(animate)
 })
 

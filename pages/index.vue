@@ -1,8 +1,14 @@
 <template>
   <div class="flex flex-col h-full md:flex-row">
-    <div class="absolute top-0 left-0 p-8 text-primary-100 z-20" :class="{'hidden md:inline' : store.page.open}" @click="closeSwipe">
+    <div class="absolute top-0 left-0 pt-8 px-8 text-primary-100 z-30 w-full" :class="{'hidden md:inline' : store.page.open}">
+      <div @click="closeSwipe"> 
         <h1 class="md:text-5xl text-4xl">Dani&euml;l KvG</h1>
         <h2 class="md:text-2xl text-xl">Kooyman van Guldener</h2>
+      </div>  
+      <div class="flex flex-row pt-2 text-sub justify-between opacity-0 transition-all delay-700 duration-500" :class="{'opacity-100' : aboutHeight > 99}"> 
+        <h2>Projects</h2>
+        <i class="ph ph-arrow-right text-4xl" @click="nextProject()"></i>
+      </div>
     </div>
     <div class="absolute top-14 left-0 p-8 z-10">
         <div class="mb-8 items-baseline pt-8 pr-4 text-secondary-300">
@@ -11,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="absolute z-20 top-1/4 left-0 right-0 bottom-1/4" :class="aboutHeight > 80 ? 'bottom-72 top-32' : ''">
+    <div class="absolute z-20 top-1/4 left-0 right-0 bottom-1/4 transition-all duration-700" :class="aboutHeight > 80 ? 'bottom-72 top-32' : ''">
       <homeScene ref="homeScene"/>
     </div>
     <div class="relative h-full w-full bg-gradient-to-b from-primary-950 to-main">
@@ -60,7 +66,7 @@
       </div>
     </div>
     <!-- <AboutMeMobile class="absolute w-full max-h-4/5 bottom-0 z-10 overflow-y-visible" :class="{ animated: !isSwiping }" :style="aboutStyle"/> -->
-    <Projects class="absolute w-full max-h-4/5 bottom-0 z-10 overflow-y-visible" :class="{ animated: !isSwiping }" :style="aboutStyle"/>
+    <Projects class="absolute w-full max-h-4/5 bottom-0 z-10 overflow-y-visible transition-all duration-700" :class="{ animated: !isSwiping }" :style="aboutStyle"/>
 
     <div 
       class="flex flex-col shrink-0 h-[0px] md:max-w-[0px] md:h-full bg-secondary-500 transition-all duration-500 ease-in-out" 
@@ -116,8 +122,10 @@
 <script lang="ts" setup>
 import { useSwipe } from '@vueuse/core';
 import { useStore } from '~/store/store';
+import { useProjectStore } from '~/store/projectStore';
 
 const store = useStore()
+const projectStore = useProjectStore()
 const pages = ['about me', 'passions', 'education', 'work experience', 'board years', 'skills', 'projects']
 const nextpage = computed(() => pages[pages.findIndex(isPage) + 1])
 const isPage = (element: string) => element == store.page.subject
@@ -127,6 +135,11 @@ const aboutHeight = ref(0)
 function openPage(name: any) {
   store.page.subject = name
   store.page.open = true
+}
+
+function nextProject() {
+  projectStore.nextProject()
+  console.log(projectStore.currentProject)
 }
 
 function closeSwipe() {
