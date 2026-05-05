@@ -21,7 +21,7 @@
       <homeScene ref="homeScene"/>
     </div>
     <div class="relative h-full w-full bg-gradient-to-b from-primary-950 to-main">
-      <div ref="swipe" class="absolute bottom-0 left-0 right-0 flex flex-col text-secondary-300 pb-4 gap-4 items-center" :class="{'hidden md:inline' : store.page.open}">
+      <div ref="swipe" class="absolute bottom-0 left-0 right-0 flex flex-col text-secondary-300 pb-4 gap-4 items-center md:hidden" :class="{'hidden md:inline' : store.page.open}">
         <i class="ph ph-arrow-up text-5xl"></i>
         <p class="text-2xl">Swipe up for my projects!</p>
       </div>

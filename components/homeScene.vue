@@ -1,7 +1,7 @@
 <template>
-    <div id="dragfield" class="absolute left-0 right-0 top-0 bottom-0 flex flex-col justify-center pointer-events-auto">
+    <div id="dragfield" class="absolute left-0 right-0 top-0 bottom-0 flex flex-col justify-center items-center pointer-events-auto">
         <div 
-            class="h-96 w-3/4 transition-all duration-800 ease-in-out touch-none" 
+            class="h-96 max-w-[760px] transition-all duration-800 ease-in-out touch-none" 
             :class="{'h-full w-full': !store.page.open}" 
             ref="container">
         </div>
@@ -72,7 +72,7 @@ function init() {
 
     //Add camera
     camera = new PerspectiveCamera(70, aspectRatio.value, 0.1, 1000)
-    if (!mobile.value) camera.position.set(-3.6, 2, -12)
+    if (!mobile.value) camera.position.set(0, 3, -5)
     else camera.position.set(0, 3, -7)
     camera.lookAt(0, -1, 0)
     scene.add(camera)
@@ -148,7 +148,7 @@ async function loadFirst(model: projectVis) {
 
 async function loadNext(model: projectVis) {
     [model.gltf] = await Promise.all([loader.loadAsync(model.url)])
-    model.gltf.scene.position.set(-15, -2, 0)
+    model.gltf.scene.position.set(-20, -2, 0)
     //transformControl.attach(model.gltf.scene)
     scene.add(model.gltf.scene)
 }
@@ -157,7 +157,7 @@ function nextModel() {
     if (currentProject.value.gltf) {
         gsap.to(currentProject.value.gltf!.scene.position, {x: 0, y: -2, z: 0, duration: 2, ease: "power2.inOut"})
         orbit.reset()
-        gsap.to(nextProject.value.gltf!.scene.position, {x: 17, y: -2, z: 0, onComplete: removeModel, onCompleteParams: [nextProject.value.gltf!.scene], duration: 2, ease: "power2.inOut"})
+        gsap.to(nextProject.value.gltf!.scene.position, {x: 20, y: -2, z: 0, onComplete: removeModel, onCompleteParams: [nextProject.value.gltf!.scene], duration: 2, ease: "power2.inOut"})
     }
 }
 
