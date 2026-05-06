@@ -7,7 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "preinstall": "npx only-allow pnpm",
+    
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
@@ -20,7 +20,6 @@
     "gsap": "^3.12.5",
     "nuxt": "^3.20.1",
     "nuxt-viewport": "^2.1.5",
-    "pinia": "^3.0.1",
     "three": "^0.164.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",

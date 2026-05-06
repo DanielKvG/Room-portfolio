@@ -3,14 +3,16 @@
         <div 
             class="h-96 max-w-[760px] transition-all duration-800 ease-in-out touch-none" 
             :class="{'h-full w-full': !store.page.open}" 
-            ref="container">
+            ref="container"
+            >
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { AmbientLight, PerspectiveCamera, Scene, WebGLRenderer, Clock, HemisphereLight, DirectionalLight, Object3D, Raycaster, Vector2, Mesh, MeshBasicMaterial, MeshPhongMaterial, Material, Color, Quaternion, Vector3, Euler } from 'three';
-import { useElementSize, useWindowSize } from '@vueuse/core';
+import { useElementSize, useWindowSize, invoke, until } from '@vueuse/core';
+import { useTemplateRef, onMounted } from 'vue'
 import { useStore } from '~/store/store';
 import { useProjectStore} from '~/store/projectStore';
 import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject, TransformControls } from 'three/examples/jsm/Addons.js';
@@ -23,7 +25,6 @@ let basicRoom: GLTF
 let camera: PerspectiveCamera
 let hiddenCamera: PerspectiveCamera
 let scene: Scene
-let container: Ref<HTMLCanvasElement | null>
 let clock: Clock
 let camTarget: Object3D
 let down: boolean
@@ -48,11 +49,11 @@ const loader = new GLTFLoader()
 const highlighted = computed(() => store.highlighted)
 const pages = ['bureau', 'statafel', 'piano']
 
-const el = useTemplateRef('container')
-const size = reactive(useElementSize(el, {width: 0, height: 0}))
-
+const container = ref(null)
+const size = reactive(useElementSize(container, {width: 0, height: 0}))
 const aspectRatio = computed(() => size.width / size.height)
 const mobile = computed(() => useWindowSize().width.value < 1024)
+
 const currentProject = computed(() => projectsStore.getProject())
 const nextProject = computed(() => projectsStore.getNextProject())
 
@@ -68,7 +69,7 @@ function init() {
     scene = new Scene();
 
     //Initialize container & dragfield
-    container = ref(null)
+    //container = ref(null)
 
     //Add camera
     camera = new PerspectiveCamera(70, aspectRatio.value, 0.1, 1000)
@@ -181,6 +182,7 @@ function updateCamera() {
 //Add Renderer
 function setRenderer() {
     if (container.value) {
+        console.log('yas queen')
         renderer = new WebGLRenderer({ antialias: true })
         renderer.setClearColor( 0x000000, 0 )
         // renderer.shadowMap.enabled = true
@@ -188,7 +190,7 @@ function setRenderer() {
         renderer.setPixelRatio( window.devicePixelRatio )
         updateRender()
         container.value.appendChild(renderer.domElement)
-    }
+    } else console.log(container.value)
 }
 
 //Add orbit controls
@@ -335,9 +337,10 @@ watch(currentProject, () => {
 })
 
 onMounted(() => {
+    console.log(container.value)
     setRenderer()
     setOrbitControls()
-    //setTransformControls()
+    // //setTransformControls()
     renderer.setAnimationLoop(animate)
 })
 
