@@ -34,13 +34,10 @@ let transformControl: TransformControls
 type projectVis = {
     gltf: GLTF | undefined
     url: string
+    title: string
+    text: Array<string>
+    topics: Array<string>
 }
-
-var scale = 0.00005;
-var lastX = 0;
-var lastY = 0;
-var meshX = 0;
-var meshY = 0;
 
 //const raycaster = new Raycaster()
 const store = useStore()
@@ -233,6 +230,10 @@ function setOrbitControls() {
     orbit = new OrbitControls( hiddenCamera, renderer.domElement)
     orbit.enableDamping = true
     orbit.maxPolarAngle = Math.PI / 2;
+    orbit.enableZoom = true
+    orbit.zoomSpeed = 4
+    orbit.enablePan = false
+    orbit.autoRotate = true
     
 
 
@@ -337,10 +338,8 @@ watch(currentProject, () => {
 })
 
 onMounted(() => {
-    console.log(container.value)
     setRenderer()
     setOrbitControls()
-    // //setTransformControls()
     renderer.setAnimationLoop(animate)
 })
 
