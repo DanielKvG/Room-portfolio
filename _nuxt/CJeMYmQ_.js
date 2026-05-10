@@ -1,1 +1,0 @@
-import{f as n,x as s,c as a,a as c,o as r}from"./DacEIzFG.js";const i={id:"hobby-content"},u=n({__name:"hobbycorner",setup(m){async function o(){await new Promise(e=>setTimeout(e,2e3)),document.getElementById("hobby-content")?.setAttribute("style","opacity: 1;")}return s(()=>{o()}),(e,t)=>(r(),a("div",i,[...t[0]||(t[0]=[c("h1",null,"Coming soon",-1)])]))}});export{u as default};
