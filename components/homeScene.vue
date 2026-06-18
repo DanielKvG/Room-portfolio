@@ -53,6 +53,7 @@ const mobile = computed(() => useWindowSize().width.value < 1024)
 
 const currentProject = computed(() => projectsStore.getProject())
 const nextProject = computed(() => projectsStore.getNextProject())
+const lastProject = computed(() => projectsStore.getLastProject())
 
 //Setup function
 function init() {
@@ -155,8 +156,9 @@ function nextModel() {
     if (currentProject.value.gltf) {
         gsap.to(currentProject.value.gltf!.scene.position, {x: 0, y: -2, z: 0, duration: 2, ease: "power2.inOut"})
         orbit.reset()
-        gsap.to(nextProject.value.gltf!.scene.position, {x: 20, y: -2, z: 0, onComplete: removeModel, onCompleteParams: [nextProject.value.gltf!.scene], duration: 2, ease: "power2.inOut"})
+        gsap.to(lastProject.value.gltf!.scene.position, {x: 20, y: -2, z: 0, onComplete: removeModel, onCompleteParams: [lastProject.value.gltf!.scene], duration: 2, ease: "power2.inOut"})
     }
+    else console.log(nextProject)
 }
 
 function removeModel(model: Object3D) {
@@ -179,7 +181,6 @@ function updateCamera() {
 //Add Renderer
 function setRenderer() {
     if (container.value) {
-        console.log('yas queen')
         renderer = new WebGLRenderer({ antialias: true })
         renderer.setClearColor( 0x000000, 0 )
         // renderer.shadowMap.enabled = true

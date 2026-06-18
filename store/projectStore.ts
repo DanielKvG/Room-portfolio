@@ -28,6 +28,18 @@ export const useProjectStore = defineStore('useProjectStore', () => {
           'Blender', 'Animating'
         ]
     },
+    {
+        gltf: <GLTF | undefined> undefined,
+        url: "/models/bikeMount.glb",
+        title: 'Keyboard bike mount',
+        text: [
+          'In the winter I train cycling inside on a taxc, which is boring compared to cycling outside. So I decided that I want to be productive on the taxc.',
+          'I created this keyboard bike mount to be able to type and sport at the same time.'
+        ],
+        topics: [
+          'Topology optimalisation', 'Solidworks', 'Blender'
+        ]
+    },
   ]
 
   const projectLength = projects.length
@@ -50,11 +62,19 @@ export const useProjectStore = defineStore('useProjectStore', () => {
     else return projects[currentProject.value + 1]
   }
 
+  function getLastProject() {
+    if (currentProject.value == 0) {
+      return projects[projectLength-1]
+    }
+    else return projects[currentProject.value - 1]
+  }
+
   return {
     currentProject,
     projects,
     nextProject,
     getProject,
     getNextProject,
+    getLastProject,
   }
 })
