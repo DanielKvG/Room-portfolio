@@ -12,10 +12,12 @@ jobs:
 
     steps:
       - name: git-checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
+        with:
+          node-version: 24
 
       - name: Install all dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run generate # The build command of your project
