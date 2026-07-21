@@ -10,22 +10,22 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/ui": "^2.21.1",
+    "@nuxt/ui": "^2.22.3",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "latest",
     "@pinia/nuxt": "^0.10.1",
-    "gsap": "^3.12.5",
-    "nuxt": "^3.20.1",
-    "nuxt-viewport": "^2.1.5",
+    "gsap": "^3.15.0",
+    "nuxt": "^3.21.9",
+    "nuxt-viewport": "^2.4.0",
     "three": "^0.164.1",
-    "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue": "^3.5.40",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "@types/three": "^0.164.0",
-    "@vueuse/core": "^10.9.0",
-    "@vueuse/nuxt": "^10.9.0",
-    "sass": "^1.77.8",
-    "vite": "^5.2.11"
+    "@types/three": "^0.164.1",
+    "@vueuse/core": "^10.11.1",
+    "@vueuse/nuxt": "^10.11.1",
+    "sass": "^1.101.3",
+    "vite": "^5.4.21"
   }
 }
