@@ -12,7 +12,12 @@ jobs:
 
     steps:
       - name: git-checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
+        
+      - name: node-setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
 
       - name: Install all dependencies
         run: npm install
