@@ -7,7 +7,6 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
@@ -15,15 +14,12 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "latest",
     "@pinia/nuxt": "^0.10.1",
-    "embla-carousel-auto-scroll": "^8.6.0",
-    "embla-carousel-vue": "^8.6.0",
     "gsap": "^3.12.5",
     "nuxt": "^3.20.1",
     "nuxt-viewport": "^2.1.5",
     "three": "^0.164.1",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0",
-    "vue3-carousel-nuxt": "^1.1.6"
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@types/three": "^0.164.0",

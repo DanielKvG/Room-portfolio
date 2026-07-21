@@ -46,7 +46,6 @@ const store = useStore()
 const projectsStore = useProjectStore()
 const loader = new GLTFLoader()
 const highlighted = computed(() => store.highlighted)
-const pages = ['bureau', 'statafel', 'piano']
 
 const container = ref(null)
 const size = reactive(useElementSize(container, {width: 0, height: 0}))
@@ -84,8 +83,6 @@ function init() {
     scene.add(camera)
 
     hiddenCamera = camera.clone()
-
-
 
     //----- AmbientLight for lighting up all faces (switch or light/dark mode)
     const ambientLight = new AmbientLight(0xffffff, 0.6);
