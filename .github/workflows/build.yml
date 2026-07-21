@@ -20,7 +20,7 @@ jobs:
           node-version: 24
 
       - name: Install all dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build
         run: npm run generate # The build command of your project
