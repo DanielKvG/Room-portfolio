@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="absolute z-20 top-1/4 left-0 right-0 bottom-1/4 transition-all duration-700" :class="aboutHeight > 80 ? 'bottom-72 top-32' : ''">
+    <div class="absolute z-20 top-1/4 left-0 right-0 bottom-1/4 transition-all duration-700" :class="aboutHeight > 80 ? 'bottom-80 top-24 min-h-64' : ''">
       <homeScene ref="homeScene"/>
     </div>
     <div class="relative h-full w-full bg-gradient-to-b from-primary-950 to-main">
