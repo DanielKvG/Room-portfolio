@@ -139,7 +139,6 @@ function openPage(name: any) {
 
 function nextProject() {
   projectStore.nextProject()
-  console.log(projectStore.currentProject)
 }
 
 function closeSwipe() {

@@ -18,6 +18,7 @@ import { useProjectStore} from '~/store/projectStore';
 import { OrbitControls, GLTFLoader, type GLTF, CSS3DRenderer, CSS3DObject, TransformControls } from 'three/examples/jsm/Addons.js';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
+import { toRaw } from "vue";
 
 let renderer: WebGLRenderer
 let orbit: OrbitControls
@@ -31,6 +32,7 @@ let down: boolean
 let matBuffer: Array<Material> = []
 let dragger: Draggable
 let transformControl: TransformControls
+
 type projectVis = {
     gltf: GLTF | undefined
     url: string
@@ -54,6 +56,11 @@ const mobile = computed(() => useWindowSize().width.value < 1024)
 const currentProject = computed(() => projectsStore.getProject())
 const nextProject = computed(() => projectsStore.getNextProject())
 const lastProject = computed(() => projectsStore.getLastProject())
+
+const projects: Array<any> = toRaw(projectsStore.projects)
+let requestedProjects: Array<number> = []
+const loadedProjects: Array<any> = []
+let lastloaded = -1
 
 //Setup function
 function init() {
@@ -105,11 +112,52 @@ function init() {
     //----- Add lights to the scene ------
     scene.add(ambientLight, hemiLight, dirLight)
 
+    //----- Load the first and second project ------
+    requestedProjects.push(projectsStore.currentProject, projectsStore.currentProject + 1)
+
+    loadProjects()
+
     //----- Load the room ------
-    loadFirst(currentProject.value)
+    //loadFirst(projects[projectsStore.currentProject])
 
     //----- Load next item -----
-    loadNext(nextProject.value)
+    //loadNext(nextProject.value)
+}
+
+async function loadProjects() {
+    let last = requestedProjects[requestedProjects.length - 1]
+
+    // prevent last to be lower than lastloaded
+    if (last < lastloaded) {last = last + lastloaded + 1}
+
+    // load the projects
+    for (let i = lastloaded+1; i <= last; i++) {
+        await loadNext(projects[i])
+
+        if (i == projects.length-1) {
+            lastloaded = -1
+        } else lastloaded = i
+    }
+
+    // remove old projects
+    for (let i = 0; i < loadedProjects.length-2; i++) {
+        gsap.to(
+            loadedProjects[i].gltf.scene.position, 
+            {
+                x: 20, y: -2, z: 0, 
+                onComplete: removeModel, 
+                onCompleteParams: [loadedProjects[i].gltf.scene], 
+                duration: 2, 
+                ease: "power2.inOut"
+            }
+        )
+        loadedProjects.shift()
+    }
+
+    // move current project into view
+    if (loadedProjects.length >= 2) {
+        gsap.to(loadedProjects[loadedProjects.length-2].gltf.scene.position, {x: 0, y: -2, z: 0, duration: 2, ease: "power2.inOut"})
+    }
 }
 
 //Add transform controls
@@ -138,34 +186,19 @@ function setTransformControls() {
     scene.add(transformControl)
 }
 
-//load modal function
-async function loadFirst(model: projectVis) {
-    [model.gltf] = await Promise.all([loader.loadAsync(model.url)])
-    model.gltf.scene.position.set(0, -2, 0)
-    scene.add(model.gltf.scene)
-}
-
 async function loadNext(model: projectVis) {
     [model.gltf] = await Promise.all([loader.loadAsync(model.url)])
     model.gltf.scene.position.set(-20, -2, 0)
     //transformControl.attach(model.gltf.scene)
     scene.add(model.gltf.scene)
-}
-
-function nextModel() {
-    if (currentProject.value.gltf) {
-        gsap.to(currentProject.value.gltf!.scene.position, {x: 0, y: -2, z: 0, duration: 2, ease: "power2.inOut"})
-        orbit.reset()
-        gsap.to(lastProject.value.gltf!.scene.position, {x: 20, y: -2, z: 0, onComplete: removeModel, onCompleteParams: [lastProject.value.gltf!.scene], duration: 2, ease: "power2.inOut"})
-    }
-    else console.log(nextProject)
+    loadedProjects.push(model)
 }
 
 function removeModel(model: Object3D) {
     scene.remove(model)
-    loadNext(nextProject.value)
+    console.log('removed' + model)
+    //loadNext(nextProject.value)
 }
-    
 
 //Update functions
 function updateRender() {
@@ -193,79 +226,40 @@ function setRenderer() {
 
 //Add orbit controls
 function setOrbitControls() {
-    // const dragfield = document.getElementById('dragfield')
-    // if (!dragfield) {
-    //     console.log('dragfield not defined')
-    //     return
-    // } 
-    // else {
-    //     //dragfield.addEventListener('mousemove', onHighlight)
-    //     renderer.domElement.addEventListener('pointermove', function(e) {
-    //         if (down) {
-    //             lastX = e.clientX
-    //             lastY = e.clientY
-    //             down = false
-    //             console.log('stuck')
-    //         } else if (currentProject.value.gltf) {
-    //             const model = currentProject.value.gltf.scene
-    //             const dX = lastX - e.clientX
-    //             const dY = lastY - e.clientY
-    //             const currentRot = model.rotation
-    //             lastX = e.clientX
-    //             lastY = e.clientY
-    //             model.rotateX(currentRot.x + (dX * scale))
-    //             model.rotateY(currentRot.y + (dY * scale))
-    //         }
-    //     })
-    //     dragfield.addEventListener('pointerup', function() {
-    //         down = false
-    //         console.log('up')
-    //     })
-        
-    //     dragfield.addEventListener('pointerdown', function() {
-    //         down = true
-    //         console.log('down')
-    //     })
-    // }
-
     orbit = new OrbitControls( hiddenCamera, renderer.domElement)
     orbit.enableDamping = true
     orbit.maxPolarAngle = Math.PI / 2;
     orbit.enableZoom = true
     orbit.zoomSpeed = 4
-    orbit.enablePan = false
+    orbit.enablePan = true
     orbit.autoRotate = true
-    
-
-
-
-    // controls = new OrbitControls( camera, dragfield)
-    // controls.target.set(0, -1, 0)
-    // controls.enablePan = false
-    // controls.enableDamping = true
-    // controls.zoomSpeed = 4
-    // if (mobile.value) controls.maxDistance = 15
-    // else controls.maxDistance = 8
-    // controls.maxPolarAngle = Math.PI / 2
-
-    // controls.autoRotate = true
+    orbit.enableZoom = true
 }
 
 //Add animations
 function animate() {
+    // Handle rotation of the object
     orbit.update()
+ 
+    // check if the active project can be reached
+    if (loadedProjects[loadedProjects.length-2]) {
+        // get the angles for rotating the 3D model
+        var polar = orbit.getPolarAngle() - Math.PI / 3
+        var azimuth = orbit.getAzimuthalAngle() * -1
 
-    var polar = orbit.getPolarAngle() - Math.PI / 3
-    var azimuth = orbit.getAzimuthalAngle() * -1
+        // get the zoom for scaling the 3D model NOT FINISHED
+        var zoom = orbit.target.distanceTo( orbit.object.position )
 
-    var q = new Quaternion()
-    var axis = new Vector3(0, 1, 0)
+        var q = new Quaternion()
+        var axis = new Vector3(0, 1, 0)
 
-    q.setFromAxisAngle(axis, azimuth)
-    q.setFromEuler(new Euler(polar, azimuth, 0))
+        q.setFromAxisAngle(axis, azimuth)
+        q.setFromEuler(new Euler(polar, azimuth, 0))
 
-    currentProject.value.gltf?.scene.quaternion.copy( q )
-
+        loadedProjects[loadedProjects.length-2].gltf.scene.quaternion.copy( q )
+    }
+    
+    // render scene according to the camera
     renderer.render(scene, camera)
 }
 
@@ -335,7 +329,18 @@ watch(aspectRatio, () => {
 })
 
 watch(currentProject, () => {
-    nextModel()
+    console.log(currentProject.value)
+    let last = projects.length - 1
+    let requested = projectsStore.currentProject
+    if (requested == last) {
+        requestedProjects.push(0)
+    } else if (requested < last) {
+        requestedProjects.push(requested + 1)
+    } else {
+        requestedProjects = [1, 2]
+    }
+
+    loadProjects()
 })
 
 onMounted(() => {
