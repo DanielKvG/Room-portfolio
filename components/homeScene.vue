@@ -1,5 +1,6 @@
 <template>
     <div id="dragfield" class="absolute left-0 right-0 top-0 bottom-0 flex flex-col justify-center items-center pointer-events-auto">
+        <p class="absolute right-4 bottom-4" v-if="actionState != 'no'" @click="toggleAction()">{{ actionState }} animation</p>
         <div 
             class="h-96 max-w-[760px] transition-all duration-800 ease-in-out touch-none" 
             :class="{'h-full w-full': !store.page.open}" 
@@ -10,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AmbientLight, PerspectiveCamera, Scene, WebGLRenderer, Clock, HemisphereLight, DirectionalLight, Object3D, Raycaster, Vector2, Mesh, MeshBasicMaterial, MeshPhongMaterial, Material, Color, Quaternion, Vector3, Euler } from 'three';
+import { AmbientLight, PerspectiveCamera, Scene, WebGLRenderer, Clock, HemisphereLight, DirectionalLight, Object3D, Raycaster, Vector2, Mesh, MeshBasicMaterial, MeshPhongMaterial, Material, Color, Quaternion, Vector3, Euler, AnimationMixer } from 'three';
 import { useElementSize, useWindowSize, invoke, until } from '@vueuse/core';
 import { useTemplateRef, onMounted } from 'vue'
 import { useStore } from '~/store/store';
@@ -32,6 +33,8 @@ let down: boolean
 let matBuffer: Array<Material> = []
 let dragger: Draggable
 let transformControl: TransformControls
+let mixer: any
+let action: any
 
 type projectVis = {
     gltf: GLTF | undefined
@@ -55,6 +58,8 @@ const mobile = computed(() => useWindowSize().width.value < 1024)
 const currentProject = computed(() => projectsStore.getProject())
 const nextProject = computed(() => projectsStore.getNextProject())
 const lastProject = computed(() => projectsStore.getLastProject())
+
+const actionState = ref('no')
 
 const projects: Array<any> = toRaw(projectsStore.projects)
 let requestedProjects: Array<number> = []
@@ -151,9 +156,20 @@ async function loadProjects() {
         loadedProjects.shift()
     }
 
-    // move current project into view
+    // move current project into view and load animation if possible
     if (loadedProjects.length >= 2) {
-        gsap.to(loadedProjects[loadedProjects.length-2].gltf.scene.position, {x: 0, y: -2, z: 0, duration: 2, ease: "power2.inOut"})
+        let current = loadedProjects[loadedProjects.length-2]
+        gsap.to(current.gltf.scene.position, {x: 0, y: -2, z: 0, duration: 2, ease: "power2.inOut"})
+
+        mixer = new AnimationMixer(current.gltf.scene)
+    
+        try {
+            action = mixer.clipAction(current.gltf.animations[5])
+            actionState.value = 'start'
+        } catch (e: any) {
+            actionState.value = 'no'
+            console.log('no animation found', e.message)
+        }
     }
 }
 
@@ -188,7 +204,22 @@ async function loadNext(model: projectVis) {
     model.gltf.scene.position.set(-20, -2, 0)
     //transformControl.attach(model.gltf.scene)
     scene.add(model.gltf.scene)
+
     loadedProjects.push(model)
+}
+
+function toggleAction() {
+    if (action.isRunning()) {
+        action.stop()
+        actionState.value = 'play'
+    }
+    else {
+        action.play()
+        var delta = clock.getDelta()
+        mixer.update( delta )
+        actionState.value = 'stop'
+    }
+    
 }
 
 function removeModel(model: Object3D) {
@@ -255,6 +286,10 @@ function animate() {
 
         loadedProjects[loadedProjects.length-2].gltf.scene.quaternion.copy( q )
     }
+
+    // animations
+    var delta = clock.getDelta()
+	if (mixer) mixer.update( delta )
     
     // render scene according to the camera
     renderer.render(scene, camera)
