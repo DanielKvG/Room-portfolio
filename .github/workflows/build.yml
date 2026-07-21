@@ -12,14 +12,12 @@ jobs:
 
     steps:
       - name: git-checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Install all dependencies
-        # run: pnpm install
         run: npm install
 
       - name: Build
-        # run: pnpm build
         run: npm run generate # The build command of your project
 
       - name: Push
