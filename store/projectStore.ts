@@ -40,6 +40,18 @@ export const useProjectStore = defineStore('useProjectStore', () => {
           'Topology optimalisation', 'Solidworks', 'Blender'
         ]
     },
+    {
+      gltf: <GLTF | undefined> undefined,
+      url: "/models/catan.glb",
+      title: 'Travel box for catan',
+      text: [
+        'I like playing catan, but the box often prevented me from bringing it to other places. So I created a smaller version.',
+        'The box is only 1/7th of the original box, and has many use benefits. The print file has been uploaded to my bambu profile.'
+      ],
+      topics: [
+        'Solidworks', '3D printing', 'user testing'
+      ]
+    }
   ]
 
   const projectLength = projects.length
