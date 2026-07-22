@@ -14,7 +14,8 @@ export const useProjectStore = defineStore('useProjectStore', () => {
         ],
         topics: [
           'Blender', 'ThreeJS'
-        ]
+        ],
+        animation: undefined
     },
     {
         gltf: <GLTF | undefined> undefined,
@@ -26,7 +27,8 @@ export const useProjectStore = defineStore('useProjectStore', () => {
         ],
         topics: [
           'Blender', 'Animating'
-        ]
+        ],
+        animation: 5
     },
     {
         gltf: <GLTF | undefined> undefined,
@@ -38,7 +40,8 @@ export const useProjectStore = defineStore('useProjectStore', () => {
         ],
         topics: [
           'Topology optimalisation', 'Solidworks', 'Blender'
-        ]
+        ],
+        animation: undefined
     },
     {
       gltf: <GLTF | undefined> undefined,
@@ -50,7 +53,8 @@ export const useProjectStore = defineStore('useProjectStore', () => {
       ],
       topics: [
         'Solidworks', '3D printing', 'user testing'
-      ]
+      ],
+      animation: 0
     }
   ]
 

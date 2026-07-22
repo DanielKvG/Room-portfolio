@@ -42,6 +42,7 @@ type projectVis = {
     title: string
     text: Array<string>
     topics: Array<string>
+    animation: number | undefined
 }
 
 //const raycaster = new Raycaster()
@@ -164,8 +165,11 @@ async function loadProjects() {
         mixer = new AnimationMixer(current.gltf.scene)
     
         try {
-            action = mixer.clipAction(current.gltf.animations[5])
+            let animation = projects[projectsStore.currentProject].animation
+
+            action = mixer.clipAction(current.gltf.animations[animation])
             actionState.value = 'start'
+
         } catch (e: any) {
             actionState.value = 'no'
             console.log('no animation found', e.message)
